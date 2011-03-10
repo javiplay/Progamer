@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SuperMarioCode
+Bundle-SymbolicName: SuperMarioCode; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: supermariocode.Activator
+Bundle-Vendor: Javier Asensio
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
