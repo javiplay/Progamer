@@ -7,6 +7,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -46,6 +48,7 @@ public class MarioCodeView extends ViewPart {
 	
 	
 	private Canvas myCanvas;
+	Image image1, image2;
 
 	/*
 	 * The content provider class is responsible for
@@ -71,14 +74,36 @@ public class MarioCodeView extends ViewPart {
 		
 				
 
-		myCanvas = new Canvas(parent, SWT.NULL);
+		myCanvas = new Canvas(parent, SWT.H_SCROLL);
 		
-		Image image = new Image(myCanvas.getDisplay(),
-			MarioCodeView.class.getResourceAsStream("super-mario.jpg"));
+		image1 = new Image(myCanvas.getDisplay(),
+			MarioCodeView.class.getResourceAsStream("background1.jpg"));
+		image2 = new Image(myCanvas.getDisplay(),
+				MarioCodeView.class.getResourceAsStream("background2.jpg"));
 		
-		myCanvas.setBackgroundImage(image);
+		myCanvas.setBackgroundImage(image1);
 		
+		myCanvas.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
 				
+			}
+			
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("x: "+e.x+", y:"+e.y);
+				
+			}
+		});		
 		
 		makeActions();
 		contributeToActionBars();
@@ -107,6 +132,7 @@ public class MarioCodeView extends ViewPart {
 		action1 = new Action() {
 			public void run() {
 				showMessage("Action 1 executed");
+				myCanvas.setBackgroundImage(image1);
 			}
 		};
 		action1.setText("Action 1");
@@ -118,6 +144,7 @@ public class MarioCodeView extends ViewPart {
 		action2 = new Action() {
 			public void run() {
 				showMessage("Action 2 executed");
+				myCanvas.setBackgroundImage(image2);
 			}
 		};
 		action2.setText("Action 2");
