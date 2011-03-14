@@ -6,18 +6,35 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-
-
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentListener;
 /**
  * This sample class demonstrates how to plug-in a new
  * workbench view. The view shows data obtained from the
@@ -36,7 +53,7 @@ import org.eclipse.ui.part.ViewPart;
  * <p>
  */
 
-public class MarioCodeView extends ViewPart {
+public class MarioCodeView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -49,6 +66,10 @@ public class MarioCodeView extends ViewPart {
 	
 	private Canvas myCanvas;
 	Image image1, image2;
+	
+	Label label;
+	Label labelState;
+	Composite control;
 
 	/*
 	 * The content provider class is responsible for
@@ -72,8 +93,7 @@ public class MarioCodeView extends ViewPart {
 	 */
 	public void createPartControl(Composite parent) {
 		
-				
-
+	    control = parent;
 		myCanvas = new Canvas(parent, SWT.H_SCROLL);
 		
 		image1 = new Image(myCanvas.getDisplay(),
@@ -81,7 +101,23 @@ public class MarioCodeView extends ViewPart {
 		image2 = new Image(myCanvas.getDisplay(),
 				MarioCodeView.class.getResourceAsStream("background2.jpg"));
 		
-		myCanvas.setBackgroundImage(image1);
+		myCanvas.setBackgroundImage(image1);		
+		
+		label = new Label(parent, SWT.WRAP);
+        label.setText("Hello World");
+        
+        //labelState = new Label(parent, SWT.WRAP);
+        
+        // add myself as a global selection listener
+        getSite().getPage().addSelectionListener(this);
+        
+        
+        
+        // prime the selection
+        selectionChanged(getSite().getPage().getActiveEditor(), getSite().getPage().getSelection());
+
+
+
 		
 		myCanvas.addMouseListener(new MouseListener() {
 			
@@ -99,15 +135,40 @@ public class MarioCodeView extends ViewPart {
 			
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub			
 				System.out.println("x: "+e.x+", y:"+e.y);
 				
 			}
 		});		
 		
+		
+		// probando esto...de los resource listener 
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IResourceChangeListener listener = new myResourceListener();
+		workspace.addResourceChangeListener(listener);
+		
 		makeActions();
 		contributeToActionBars();
 	}
+	
+	public class myResourceListener implements IResourceChangeListener 
+	{
+		@Override
+		public void resourceChanged(IResourceChangeEvent event) {
+				// TODO Auto-generated method stub					
+			if (event.getType() ==  IResourceChangeEvent.POST_CHANGE) {				
+				Display disp = control.getDisplay();
+				disp.asyncExec(new Runnable() {					
+					@Override
+					public void run() {
+						label.setText(label.getText()+"\nEvent type: CHANGED");
+						//IResourceDelta rootDelta = event.getDelta();						
+					}
+				});					
+			}
+		}
+	}
+
 
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
@@ -168,5 +229,57 @@ public class MarioCodeView extends ViewPart {
 	 */
 	public void setFocus() {
 		myCanvas.setFocus();
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		
+		if (part != null) {
+			Class c = part.getClass();			
+			if (c.getName().equals("org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor")) {
+				IEditorPart editor = (IEditorPart) part;
+				IEditorInput input = editor.getEditorInput();
+				
+				
+				
+				String text = input.getName() + " should be painted...?";				
+				text += "\n getting its IDocument object...does not work.";				
+				IFile file = (IFile) input.getAdapter(IFile.class);				
+				IDocument doc = (IDocument) file.getAdapter(Document.class);
+				if (doc==null) text+="Document is NULL!!";
+				
+				
+				label.setText(text);
+				
+				/*doc.addDocumentListener(new IDocumentListener() {
+
+					@Override
+					public void documentAboutToBeChanged(DocumentEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void documentChanged(DocumentEvent arg0) {
+						label.setText(label.getText()+"\nDocument Changed occurred");						
+					}
+					
+											
+					});
+				*/
+				
+				//file.getContents();
+				input.getPersistable();
+				
+				
+				
+				
+			}
+			else {
+				label.setText("Hello World! Open or select a valid java file");
+			}							
+		}		
+		label.setText(label.getText()+"\n-----\n"+getSite().getPage().getEditorReferences().length+" opened editors.");
+		
 	}
 }
