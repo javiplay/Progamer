@@ -357,15 +357,18 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 				StyledText st = (StyledText) editor.getAdapter(Control.class);
 				
 				try {
-				st.addCaretListener(new CaretListener() {
+				if (st.getListeners(0).length==0){
 					
-					@Override
-					public void caretMoved(CaretEvent event) {
-						// TODO Auto-generated method stub
-						System.out.println(event.caretOffset);
+					st.addCaretListener(new CaretListener() {
 						
+						@Override
+						public void caretMoved(CaretEvent event) {
+							// TODO Auto-generated method stub
+							System.out.println(event.caretOffset);
+							
+						}
+					});
 					}
-				});
 				}
 				catch (NullPointerException e) {
 					System.out.println("nooooo");
