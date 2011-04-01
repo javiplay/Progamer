@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -293,17 +294,24 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										MethodVisitor visitor = new MethodVisitor();
 										parse.accept(visitor);
 
+										/*
 										for (MethodDeclaration method : visitor.getMethods()) {
 											System.out.print("Method name: "
 													+ method.getName()
 													+ " Return type: "
 													+ method.getReturnType2());
 										}
+										*/
+										ArrayList l = visitor.getTree();
+										System.out.println(l.toString());
+										
+										
 
 									}
 								}
 
 							}
+							
 						}
 					} catch (CoreException e) {
 						e.printStackTrace();
