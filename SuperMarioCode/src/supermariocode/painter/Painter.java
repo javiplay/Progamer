@@ -29,8 +29,9 @@ public class Painter  {
 	public Image img;
 	
 	public Painter(int y) {
-		ImageDescriptor imgdesc = createImageDescriptorFor("icons/smwtileset.gif");
-        img = imgdesc.createImage();
+		
+        img = new Image(MarioCodeView.myCanvas.getDisplay(),
+    			MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
         base = y;
 	}
 	
@@ -47,7 +48,7 @@ public class Painter  {
 	}
 	
 	public void paint(GC g){
-		if (treeChanged()) {
+		
 			Color c = new Color(g.getDevice(), 248, 224, 176);
 			g.setBackground(c);
 			g.fillRectangle(new Rectangle(0, 0, MarioCodeView.width, MarioCodeView.height));
@@ -55,45 +56,13 @@ public class Painter  {
 				paintTree(tree, g);
 			}
 			g.dispose();
-		}
+		
 	}
 	
-	public int totalInArrayList(ArrayList al) {
-		int total;
-		total = al.size();
-		for (Object o: al){
-			if (o instanceof ArrayList) {
-				total--;
-				total+=totalInArrayList((ArrayList) o);			
-			}		
-		}
-		return total; 
-	}
-	
-	public boolean treeChanged() {
-		// compara el nuevo arbol con el anterior
-		if (oldtree!=null)
-			System.out.println("OLD:"+oldtree.toString());
-		if (tree!=null) 
-			System.out.println("NEW:"+tree.toString());
-		if (oldtree != null && tree != null) {
-			
-			if (totalInArrayList(oldtree) == totalInArrayList(tree)) {				
-				System.out.println("No pintar!!");
-				return false;
-			}
-			else 
-				return true;
-			
 
-		}
-		return false;
-	}
-	public ImageDescriptor createImageDescriptorFor(String id) {
-		  URL url = Platform.getBundle("es.javiplay.eclipse.plugin.smwcode").
-		      getEntry(id);
-		  return ImageDescriptor.createFromURL(url);
-	}
+	
+	
+
 	public void setTree(ArrayList treelist) {
 		oldtree = tree;
 		tree = treelist;

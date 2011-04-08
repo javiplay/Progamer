@@ -8,19 +8,17 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
+import supermariocode.views.MarioCodeView;
+
 public class SpriteProvider {
 	public Image img;
 	public ArrayList spritedTree;
-	public ImageDescriptor createImageDescriptorFor(String id) {
-		  URL url = Platform.getBundle("es.javiplay.eclipse.plugin.smwcode").
-		      getEntry(id);
-		  return ImageDescriptor.createFromURL(url);
-	}
+
 	
 	
-	public SpriteProvider(String spritesSheet) {	
-		ImageDescriptor imgdesc = createImageDescriptorFor(spritesSheet);
-        img = imgdesc.createImage();
+	public SpriteProvider(String spritesSheet) {			
+        img = new Image(MarioCodeView.myCanvas.getDisplay(),
+    			MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
         spritedTree = new ArrayList();
 	}
 	

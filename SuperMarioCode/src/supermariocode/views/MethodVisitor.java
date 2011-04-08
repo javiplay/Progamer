@@ -1,59 +1,31 @@
 package supermariocode.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
 
-public class MethodVisitor extends ASTVisitor {
-	
-	
-	ArrayList inner = new ArrayList();
-	ArrayList outer;
-	
-	private void begin(String s) {
-		outer = inner;
-		inner = new ArrayList();
-		inner.add(s);
-		outer.add(inner);
-	}
-	private void end() {
-		inner = outer;	
-	}
-	private void add(String s) {
-		inner.add(s);
-	}
-	
-	@Override
-	public boolean visit(MethodDeclaration node) {
-		begin("METHOD");
-		return super.visit(node);
-	}
-	
-	@Override
-	public void endVisit(MethodDeclaration node) {				
-		end();		
-	}
-	@Override
-	public boolean visit(ExpressionStatement node) {
-		add("expression");
-		return super.visit(node);
-	}
+class MethodVisitor extends ASTVisitor {
+      StringBuffer buffer = new StringBuffer();
+      public void preVisit(ASTNode node) {
+         //write the name of the node being visited
+         printDepth(node);
+         String name = node.getClass().getName();
+         name = name.substring(name.lastIndexOf('.')+1);
+         buffer.append(name);
+         buffer.append(" {\r\n");
+      }
+      public void postVisit(ASTNode node) {
+         //write a closing brace to indicate end of the node
+         printDepth(node);
+         buffer.append("}\r\n");
+      }
+      void printDepth(ASTNode node) {
+         //indent the current line to an appropriate depth
+         while (node != null) {
+            node = node.getParent();
+            buffer.append("  ");
+         }
+      }
+   }
+  
 
-	@Override
-	public boolean visit(ForStatement node) {
-		begin("FOR");
-		return super.visit(node);
-	}
-	public void endVisit(ForStatement node) {				
-		end();
-	}
-	public ArrayList getTree() {
-		return outer;
-	}
-
-}
 

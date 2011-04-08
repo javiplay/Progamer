@@ -81,16 +81,21 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	 */
 	public static final String ID = "supermariocode.views.MarioCodeView";
 
+	public final static int width = 1200;
+	public final static int height = 200;
+
 	private Action action1;
 	private Action action2;
 	
 	
-	private Canvas myCanvas;
+	public static Canvas myCanvas;
 	Image image1, image2;
 	
 	Label label;
 	Label labelState;
 	Composite control;
+	
+	
 
 	/*
 	 * The content provider class is responsible for
@@ -117,15 +122,9 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	    control = parent;
 		myCanvas = new Canvas(parent, SWT.H_SCROLL);
 		
-		image1 = new Image(myCanvas.getDisplay(),
-			MarioCodeView.class.getResourceAsStream("background1.jpg"));
-		image2 = new Image(myCanvas.getDisplay(),
-				MarioCodeView.class.getResourceAsStream("background2.jpg"));
+
 		
-		myCanvas.setBackgroundImage(image1);		
-		
-		label = new Label(parent, SWT.WRAP);
-        label.setText("Hello World");
+
         
         //labelState = new Label(parent, SWT.WRAP);
         
@@ -265,18 +264,22 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 		parser.setResolveBindings(true);
 		return (CompilationUnit) parser.createAST(null); // parse
 	}
+	
+	
 	private void makeActions() {
 		
 		/* Action 1 */
 		action1 = new Action() {
 			public void run() {
 				showMessage("Action 1 executed");
-				myCanvas.setBackgroundImage(image1);	
+					
 				
 				IWorkspace workspace = ResourcesPlugin.getWorkspace();
 				IWorkspaceRoot root = workspace.getRoot();
+				
 				// Get all projects in the workspace
 				IProject[] projects = root.getProjects();
+				
 				// Loop over all projects
 				for (IProject project : projects) {
 					try {
@@ -293,23 +296,14 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										CompilationUnit parse = parse(unit);
 										MethodVisitor visitor = new MethodVisitor();
 										parse.accept(visitor);
-
-										/*
-										for (MethodDeclaration method : visitor.getMethods()) {
-											System.out.print("Method name: "
-													+ method.getName()
-													+ " Return type: "
-													+ method.getReturnType2());
-										}
-										*/
-										ArrayList l = visitor.getTree();
-										System.out.println(l.toString());
+									
+										String l = visitor.buffer.toString();
 										
 										
-
+										System.out.println("Compilation Unit: " + unit.getElementName());
+										System.out.println(l);																				
 									}
 								}
-
 							}
 							
 						}
@@ -358,8 +352,10 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		
 		if (part != null) {
-			Class c = part.getClass();			
+			Class c = part.getClass();		
+			
 			if (c.getName().equals("org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor")) {
+				
 				IEditorPart editor = (IEditorPart) part;
 				
 				StyledText st = (StyledText) editor.getAdapter(Control.class);
@@ -387,8 +383,9 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 				System.out.println("Evento de selección sobre un editor java");
 				System.out.println("IWortkbenchPart = "+c.getName());				
 				System.out.println("IEditorInput = "+input.getName());
-				System.out.println("----------------------------------------");
+				System.out.println("----------------CONTENT-----------------");
 				
+				System.out.println("----------------------------------------");
 			}
 		}		
 		System.out.println(getSite().getPage().getEditorReferences().length+" editores abiertos.");
