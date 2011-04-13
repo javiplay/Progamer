@@ -10,7 +10,7 @@ class MethodVisitor extends ASTVisitor {
          printDepth(node);
          String name = node.getClass().getName();
          name = name.substring(name.lastIndexOf('.')+1);
-         buffer.append(name);
+         buffer.append("\""+name+"\":");
          buffer.append(" {\r\n");
       }
       public void postVisit(ASTNode node) {

@@ -1,9 +1,12 @@
 package supermariocode.views;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -56,6 +59,11 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+/*import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+*/
 /**
  * This sample class demonstrates how to plug-in a new
  * workbench view. The view shows data obtained from the
@@ -298,8 +306,14 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										parse.accept(visitor);
 									
 										String l = visitor.buffer.toString();
+										l = "{"+l+"}";
+																				
 										
-										
+										ObjectMapper mapper = new ObjectMapper();
+										/*String src = "{ \"nombre\": \"javi\", \"edad\": 31}";
+										JsonNode rootNode = mapper.readValue(src, JsonNode.class);
+										System.out.println(rootNode.get("nombre"));																				
+										*/
 										System.out.println("Compilation Unit: " + unit.getElementName());
 										System.out.println(l);																				
 									}
@@ -309,6 +323,13 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 						}
 					} catch (CoreException e) {
 						e.printStackTrace();
+					/*} catch (JsonParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						*/
 					}
 				}
 			}

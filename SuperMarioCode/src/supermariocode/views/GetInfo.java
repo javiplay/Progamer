@@ -42,12 +42,13 @@ public class GetInfo extends AbstractHandler {
 								MethodVisitor visitor = new MethodVisitor();
 								parse.accept(visitor);
 
-								for (MethodDeclaration method : visitor.getMethods()) {
+								/*for (MethodDeclaration method : visitor.getMethods()) {
 									System.out.print("Method name: "
 											+ method.getName()
 											+ " Return type: "
 											+ method.getReturnType2());
 								}
+								*/
 
 							}
 						}
