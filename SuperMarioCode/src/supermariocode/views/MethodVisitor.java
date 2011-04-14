@@ -7,22 +7,28 @@ class MethodVisitor extends ASTVisitor {
       StringBuffer buffer = new StringBuffer();
       public void preVisit(ASTNode node) {
          //write the name of the node being visited
+         
+         String name = node.getClass().getName();          
+         if ((buffer.length() > 0) && (buffer.charAt(buffer.length()-1) == '}'))
+         {
+        	 buffer.append(",\n");         
+         }
+         
          printDepth(node);
-         String name = node.getClass().getName();
          name = name.substring(name.lastIndexOf('.')+1);
-         buffer.append("\""+name+"\":");
-         buffer.append(" {\r\n");
+         buffer.append("\""+name+"\": {\n");
+         
       }
       public void postVisit(ASTNode node) {
          //write a closing brace to indicate end of the node
          printDepth(node);
-         buffer.append("}\r\n");
+         buffer.append("}");
       }
       void printDepth(ASTNode node) {
          //indent the current line to an appropriate depth
          while (node != null) {
             node = node.getParent();
-            buffer.append("  ");
+            buffer.append("   ");
          }
       }
    }

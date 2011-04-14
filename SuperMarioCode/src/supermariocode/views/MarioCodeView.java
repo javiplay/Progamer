@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -308,14 +311,13 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										String l = visitor.buffer.toString();
 										l = "{"+l+"}";
 																				
+										System.out.println(l);
+										ObjectMapper mapper = new ObjectMapper();							
+										JsonNode rootNode = mapper.readValue(l, JsonNode.class);
+										System.out.println(rootNode.get("CompilationUnit").toString());																				
 										
-										ObjectMapper mapper = new ObjectMapper();
-										/*String src = "{ \"nombre\": \"javi\", \"edad\": 31}";
-										JsonNode rootNode = mapper.readValue(src, JsonNode.class);
-										System.out.println(rootNode.get("nombre"));																				
-										*/
 										System.out.println("Compilation Unit: " + unit.getElementName());
-										System.out.println(l);																				
+																														
 									}
 								}
 							}
@@ -330,6 +332,15 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						*/
+					} catch (JsonParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
