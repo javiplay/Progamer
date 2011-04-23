@@ -1,6 +1,7 @@
 package supermariocode.views;
 
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -34,11 +35,16 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -62,6 +68,9 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentListener;
+
+import supermariocode.painter.MarioPainter;
+import supermariocode.painter.SpriteProvider;
 /*import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -130,9 +139,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	 */
 	public void createPartControl(Composite parent) {
 		
-	    control = parent;
-		myCanvas = new Canvas(parent, SWT.H_SCROLL);
-		
+	    control = parent;	   
+		myCanvas = new Canvas(control, SWT.H_SCROLL | SWT.V_SCROLL);
 
 		
 
@@ -233,7 +241,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 				disp.asyncExec(new Runnable() {					
 					@Override
 					public void run() {
-						label.setText(label.getText()+"\nEvent type: CHANGED");
+						//label.setText(label.getText()+"\nEvent type: CHANGED");
 
 										
 					}
@@ -303,21 +311,101 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 								if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
 									for (ICompilationUnit unit : mypackage
 											.getCompilationUnits()) {
+										
 										// Now create the AST for the ICompilationUnits
 										CompilationUnit parse = parse(unit);
-										MethodVisitor visitor = new MethodVisitor();
+										TreeVisitor visitor = new TreeVisitor();
 										parse.accept(visitor);
-									
-										String l = visitor.buffer.toString();
-										l = "{"+l+"}";
-																				
+										String l = visitor.toString();
 										System.out.println(l);
-										ObjectMapper mapper = new ObjectMapper();							
-										JsonNode rootNode = mapper.readValue(l, JsonNode.class);
-										System.out.println(rootNode.get("CompilationUnit").toString());																				
 										
-										System.out.println("Compilation Unit: " + unit.getElementName());
-																														
+										SpriteProvider sp = new SpriteProvider();
+										Point size = sp.getSprites(visitor.tree, 0, 0);
+										System.out.println(visitor.tree.toString());
+										System.out.println("X="+size.x+",Y="+size.y);
+										
+										//pintar
+										Rectangle bounds = new Rectangle(0,0,size.x*16, size.y*16);										
+										final Image myImage = new Image(myCanvas.getDisplay(), bounds);
+										GC gc = new GC(myImage);
+										MarioPainter painter = new MarioPainter(size.y*16);										
+										painter.paintTree(visitor.tree,gc);																			
+										gc.dispose();
+										
+										
+										//controlar barra de scroll horizontal
+										final ScrollBar hBar = myCanvas.getHorizontalBar();
+										final Point origin = new Point(0, 0);
+									    hBar.addListener(SWT.Selection, new Listener() {
+									      public void handleEvent(Event e) {
+									        int hSelection = hBar.getSelection();
+									        int destX = -hSelection - origin.x;
+									        Rectangle rect = myImage.getBounds();
+									        myCanvas.scroll(destX, 0, 0, 0, rect.width, rect.height, false);
+									        origin.x = -hSelection;
+									      }
+									    });
+									    // controlar barra de scroll vertical
+									    final ScrollBar vBar = myCanvas.getVerticalBar();
+									    vBar.addListener(SWT.Selection, new Listener() {
+									      public void handleEvent(Event e) {
+									        int vSelection = vBar.getSelection();
+									        int destY = -vSelection - origin.y;
+									        Rectangle rect = myImage.getBounds();
+									        myCanvas.scroll(0, destY, 0, 0, rect.width, rect.height, false);
+									        origin.y = -vSelection;
+									      }
+									    });
+									    // cambio de tamaño del canvas
+									    myCanvas.addListener(SWT.Resize, new Listener() {
+									      public void handleEvent(Event e) {
+									        Rectangle rect = myImage.getBounds();
+									        Rectangle client = myCanvas.getClientArea();
+									        hBar.setMaximum(rect.width);
+									        vBar.setMaximum(rect.height);
+									        hBar.setThumb(Math.min(rect.width, client.width));
+									        vBar.setThumb(Math.min(rect.height, client.height));
+									        int hPage = rect.width - client.width;
+									        int vPage = rect.height - client.height;
+									        int hSelection = hBar.getSelection();
+									        int vSelection = vBar.getSelection();
+									        if (hSelection >= hPage) {
+									          if (hPage <= 0)
+									            hSelection = 0;
+									          origin.x = -hSelection;
+									        }
+									        if (vSelection >= vPage) {
+									          if (vPage <= 0)
+									            vSelection = 0;
+									          origin.y = -vSelection;
+									        }
+									        myCanvas.redraw();
+									      }
+									    });
+									    
+									    myCanvas.addListener(SWT.Paint, new Listener() {
+									      public void handleEvent(Event e) {
+									        GC gc = e.gc;
+									        gc.drawImage(myImage, origin.x, origin.y);
+									        Rectangle rect = myImage.getBounds();
+									        Rectangle client = myCanvas.getClientArea();
+									        int marginWidth = client.width - rect.width;
+									        if (marginWidth > 0) {
+									          gc.fillRectangle(rect.width, 0, marginWidth, client.height);
+									        }
+									        int marginHeight = client.height - rect.height;
+									        if (marginHeight > 0) {
+									          gc.fillRectangle(0, rect.height, client.width,
+									                  marginHeight);
+									        }
+									      }
+									    });
+									    
+									    myCanvas.redraw();
+
+										
+										//myImage.dispose();
+																													
 									}
 								}
 							}
@@ -332,15 +420,6 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						*/
-					} catch (JsonParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 				}
 			}
