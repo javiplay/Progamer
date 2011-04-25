@@ -18,6 +18,7 @@ public class JavaMarioNode {
 		this.compList.add(comp);
 	}
 	public String toString(){
-		return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
+		//return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
+		return name;
 	}
 }

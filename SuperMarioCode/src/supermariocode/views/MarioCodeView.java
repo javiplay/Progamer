@@ -310,10 +310,10 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										System.out.println("X="+size.x+",Y="+size.y);
 										
 										//pintar
-										Rectangle bounds = new Rectangle(0,0,size.x*16, size.y*16);										
+										Rectangle bounds = new Rectangle(0,0,size.x*16, size.y*16+32);										
 										final Image myImage = new Image(myCanvas.getDisplay(), bounds);
 										GC gc = new GC(myImage);
-										MarioPainter painter = new MarioPainter(size.y*16);										
+										MarioPainter painter = new MarioPainter(size.y*16+32);										
 										painter.paintTree(visitor.tree,gc);																			
 										gc.dispose();
 										

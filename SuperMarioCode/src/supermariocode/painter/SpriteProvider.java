@@ -164,8 +164,8 @@ public class SpriteProvider {
 					
 					// establecemos el tamaño final de esta composición de sprites
 					length.x += methodLength.x+2+2; // el contenido horizontal del metodo mas el cuadro de inicio y el de final
-					if (y + methodLength.y > length.y) {
-						length.y = y + methodLength.y; // leny
+					if (2 + methodLength.y > length.y) {
+						length.y = 2 + methodLength.y; // leny
 					}																								
 					x+=3; // dejamos un hueco entre métodos de tamaño 2					
 					break;
