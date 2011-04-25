@@ -1,0 +1,81 @@
+---------------------- IF con dos bloques --------------------
+if (x>0) {
+	x = 1;
+} else {
+	x = 2;
+}
+ииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииии
+IfStatement, 
+[
+	InfixExpression, 
+	[
+		SimpleName, [], 
+		NumberLiteral, []
+	], 
+	Block, 
+	[
+		ExpressionStatement, 
+		[	
+			Assignment, 
+				[SimpleName, [],  NumberLiteral, []]
+		]
+	],  
+	Block, 
+	[
+		ExpressionStatement, 
+		[
+			Assignment,
+				[SimpleName, [], NumberLiteral, []]
+		]
+	]
+]
+
+---------------------- IF con un bloque en el else  --------------------
+
+if (x>0) 
+	x = 1;
+ else {
+	x = 2;
+}
+ииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииии
+IfStatement, 
+[	
+	InfixExpression, 
+	[
+		SimpleName, [], NumberLiteral, []
+	], 
+	ExpressionStatement, 
+	[
+		Assignment, [SimpleName, [], NumberLiteral, []]
+	], 
+	Block, 
+	[
+		ExpressionStatement, 
+		[	
+			Assignment, [SimpleName, [], NumberLiteral, []]
+		]
+	]
+]
+---------------------- IF con un bloque en el then ---------------------
+
+if (x>0) {
+	x = 1;
+} else 
+	x = 2;
+
+ииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииии
+IfStatement, 
+[
+	InfixExpression, 
+	[
+		SimpleName, [], NumberLiteral, []
+	], 
+	Block, 
+	[
+		ExpressionStatement, [Assignment, [SimpleName, [], NumberLiteral, []]]
+	], 
+	ExpressionStatement, 
+	[
+		Assignment, [SimpleName, [], NumberLiteral, []]
+	]
+]
