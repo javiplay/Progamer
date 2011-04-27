@@ -22,15 +22,25 @@ public class MarioPainter  {
 	
 	private int base;
 	public Image img;
+	public Image imgBG;
+	public GC g;
 	
-	public MarioPainter(int y) {
+	public MarioPainter(int base, GC g) {
 		
         img = new Image(MarioCodeView.myCanvas.getDisplay(),
     			MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
-        base = y;
+        imgBG = new Image(MarioCodeView.myCanvas.getDisplay(),
+    			MarioCodeView.class.getResourceAsStream("background1.jpg"));
+        this.base = base;
+        this.g = g;
+        int x = 0;
+        int y = 0;
+
+        g.drawImage(imgBG, 0, 0);
+        
 	}
 	
-	public void paintTree(ArrayList l, GC g) {
+	public void paintTree(ArrayList l) {
 		for (int i = 0; i<l.size(); i+=2) {
 			JavaMarioNode node = (JavaMarioNode) l.get(i);
 			ArrayList content = (ArrayList) l.get(i+1);
@@ -40,25 +50,11 @@ public class MarioPainter  {
 				}
 			}
 			if (!content.isEmpty()) {
-				paintTree(content, g);
+				paintTree(content);
 			}
 			
-		}
+		}		
 	}
-	
-	public void paint(GC g){
-		
-			Color c = new Color(g.getDevice(), 248, 224, 176);
-			g.setBackground(c);
-			g.fillRectangle(new Rectangle(0, 0, MarioCodeView.width, MarioCodeView.height));
-			if (tree!= null) {
-				paintTree(tree, g);
-			}
-			g.dispose();
-		
-	}
-	
-
 	
 	
 

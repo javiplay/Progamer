@@ -35,7 +35,9 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -127,9 +129,10 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	    control = parent;	   
 		myCanvas = new Canvas(control, SWT.H_SCROLL | SWT.V_SCROLL);
 
-		
+		image2 = new Image(MarioCodeView.myCanvas.getDisplay(),
+    			MarioCodeView.class.getResourceAsStream("background1.jpg"));
 
-        
+        //myCanvas.setBackgroundImage(image2);
         //labelState = new Label(parent, SWT.WRAP);
         
         // add myself as a global selection listener
@@ -311,11 +314,20 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										
 										//pintar
 										Rectangle bounds = new Rectangle(0,0,size.x*16, size.y*16+32);										
-										final Image myImage = new Image(myCanvas.getDisplay(), bounds);
-										GC gc = new GC(myImage);
-										MarioPainter painter = new MarioPainter(size.y*16+32);										
-										painter.paintTree(visitor.tree,gc);																			
+										image1 = new Image(myCanvas.getDisplay(), bounds);
+										ImageData imgData = image1.getImageData();
+										int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
+										System.out.println("WHITE PIXELLLLL = "+ whitePixel);
+										imgData.transparentPixel = whitePixel;
+										image1 = new Image(myCanvas.getDisplay(), imgData);
+										
+										
+										GC gc = new GC(image1);
+										MarioPainter painter = new MarioPainter(size.y*16+32, gc);										
+										painter.paintTree(visitor.tree);																			
+										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
 										gc.dispose();
+										painter.img.dispose();
 										
 										
 										//controlar barra de scroll horizontal
@@ -325,9 +337,10 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 									      public void handleEvent(Event e) {
 									        int hSelection = hBar.getSelection();
 									        int destX = -hSelection - origin.x;
-									        Rectangle rect = myImage.getBounds();
+									        Rectangle rect = image1.getBounds();
 									        myCanvas.scroll(destX, 0, 0, 0, rect.width, rect.height, false);
 									        origin.x = -hSelection;
+									        //myCanvas.redraw();
 									      }
 									    });
 									    // controlar barra de scroll vertical
@@ -336,15 +349,16 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 									      public void handleEvent(Event e) {
 									        int vSelection = vBar.getSelection();
 									        int destY = -vSelection - origin.y;
-									        Rectangle rect = myImage.getBounds();
+									        Rectangle rect = image1.getBounds();
 									        myCanvas.scroll(0, destY, 0, 0, rect.width, rect.height, false);
 									        origin.y = -vSelection;
+									        //myCanvas.redraw();
 									      }
 									    });
 									    // cambio de tamaño del canvas
 									    myCanvas.addListener(SWT.Resize, new Listener() {
 									      public void handleEvent(Event e) {
-									        Rectangle rect = myImage.getBounds();
+									        Rectangle rect = image1.getBounds();
 									        Rectangle client = myCanvas.getClientArea();
 									        hBar.setMaximum(rect.width);
 									        vBar.setMaximum(rect.height);
@@ -371,8 +385,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 									    myCanvas.addListener(SWT.Paint, new Listener() {
 									      public void handleEvent(Event e) {
 									        GC gc = e.gc;
-									        gc.drawImage(myImage, origin.x, origin.y);
-									        Rectangle rect = myImage.getBounds();
+									        gc.drawImage(image1, origin.x, origin.y);
+									        /*Rectangle rect = image1.getBounds();
 									        Rectangle client = myCanvas.getClientArea();
 									        int marginWidth = client.width - rect.width;
 									        if (marginWidth > 0) {
@@ -382,7 +396,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 									        if (marginHeight > 0) {
 									          gc.fillRectangle(0, rect.height, client.width,
 									                  marginHeight);
-									        }
+									        }*/
+									        //myCanvas.redraw();
 									      }
 									    });
 									    
@@ -418,7 +433,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 		action2 = new Action() {
 			public void run() {
 				showMessage("Action 2 executed");
-				myCanvas.setBackgroundImage(image2);
+				image1 = image2;
 			}
 		};
 		action2.setText("Action 2");
