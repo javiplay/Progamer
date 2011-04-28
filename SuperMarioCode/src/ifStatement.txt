@@ -79,3 +79,29 @@ IfStatement,
 		Assignment, [SimpleName, [], NumberLiteral, []]
 	]
 ]
+
+---------------------- IF else sin bloques ---------------------
+
+if (x>0) 
+	x = 1;
+ else 
+	x = 2;
+
+ииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииииии
+
+
+IfStatement, 
+[
+	InfixExpression, 
+	[
+		SimpleName, [], NumberLiteral, []
+	], 
+	ExpressionStatement, 
+	[
+		Assignment, [SimpleName, [], NumberLiteral, []]
+	], 
+	ExpressionStatement, 
+	[
+		Assignment, [SimpleName, [], NumberLiteral, []]
+	]
+]

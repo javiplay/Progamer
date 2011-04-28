@@ -199,7 +199,7 @@ public class SpriteProvider {
 					break;
 			case ASTNode.IF_STATEMENT:
 				
-				list = FindBlock(list);
+				list = getThenList(list);
 				comp = ifLeft(x, y);
 				elem.addComposite(comp);
 				x += comp.lenx;
@@ -271,6 +271,36 @@ public class SpriteProvider {
 			}
 			i+=2;
 		}
+		return blockList;
+	}
+	private ArrayList getThenList(ArrayList list) {
+		
+		
+		
+		ArrayList blockList = null;
+		JavaMarioNode n = (JavaMarioNode) list.get(2);
+
+		if (n.getNodeType() != ASTNode.BLOCK) {
+			blockList = new ArrayList();
+			blockList.add(list.get(2));
+			blockList.add(list.get(3));
+		} else {
+		    blockList = (ArrayList) list.get(3);
+		}
+		
+		return blockList;
+	}
+	private ArrayList getElseList(ArrayList list) {
+		ArrayList blockList = null;
+		JavaMarioNode n = (JavaMarioNode) list.get(4);
+
+		if (n.getNodeType() != ASTNode.BLOCK) {
+			blockList = new ArrayList();
+			blockList.add(list.get(4));
+			blockList.add(list.get(5));
+		} else {
+		    blockList = (ArrayList) list.get(5);
+		}		
 		return blockList;
 	}
 }
