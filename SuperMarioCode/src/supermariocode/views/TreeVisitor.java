@@ -20,7 +20,8 @@ class TreeVisitor extends ASTVisitor {
       }
             
       public void preVisit(ASTNode node) {         
-    	 // write the name of the node being visited         
+    	 // write the name of the node being visited
+    	  
 
     	 String name = node.getClass().getName();
          name = name.substring(name.lastIndexOf('.')+1);
@@ -28,8 +29,7 @@ class TreeVisitor extends ASTVisitor {
          ArrayList current = (ArrayList) stack.peek();
          JavaMarioNode marioNode = new JavaMarioNode(name, node.getNodeType());       
          current.add(marioNode);
-         
-         
+                  
          ArrayList children = new ArrayList();
          current.add(children);
          stack.push(children);                           

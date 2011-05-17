@@ -1,15 +1,9 @@
 package supermariocode.painter;
 
-import java.net.URL;
 import java.util.ArrayList;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-
-import supermariocode.views.MarioCodeView;
 
 public class SpriteProvider {
 	
@@ -199,32 +193,53 @@ public class SpriteProvider {
 					break;
 			case ASTNode.IF_STATEMENT:
 				
-				list = getThenList(list);
+				// pintar primero la parte else si la hay
+				ArrayList elseList = getElseList(list);
+				Point elseLength = new Point(0,0);
+				
+				x+=2;
+				if (elseList != null) {					
+					if (!elseList.isEmpty()) {
+						elseLength = getSprites(elseList, x, y);
+						// añadir al principio del elemento los cuadrados del fondo
+						// crear el metodo elem.insertCompositeAt(0,comp)
+						System.out.println("ELSE:"+elseLength.x+"x"+elseLength.y);						
+					}						
+				}
+				x-=2;
+				
+				y += elseLength.y;
+				
+				
+				
+				ArrayList thenList = getThenList(list);
 				comp = ifLeft(x, y);
 				elem.addComposite(comp);
 				x += comp.lenx;
 				y += comp.leny;
-
-				Point thenLength = new Point(0,0); // the size of the corresponding part of stage						
-				if (!list.isEmpty()) {					
-					thenLength = getSprites(list, x, y);
+				Point thenLength = new Point(0,0); // the size of the corresponding part of stage
+				int soilLength = 0;
+				if (!thenList.isEmpty()) {					
+					thenLength = getSprites(thenList, x, y);
 					System.out.println("THEN:"+thenLength.x+"x"+thenLength.y);
 					
 					y -= 2;
 					int soilx=x;
-					while (soilx < x + thenLength.x) {					
+					soilLength = (thenLength.x > elseLength.x)?thenLength.x:elseLength.x;  
+										
+					while (soilx < x + soilLength) {					
 						comp = ifCenter(soilx, y);
 						elem.addComposite(comp);						
 						soilx++;
 					}
 					x = soilx;
 				}
-				// final constructor/method terrain
+				// final terrain
 				comp = ifRight(x, y);
 				x += comp.lenx;
 				elem.addComposite(comp);
 				
-				length.x += thenLength.x+4;
+				length.x += soilLength+4;
 				if (y + thenLength.y > length.y) {
 					length.y = y + thenLength.y; // leny
 				}																								
@@ -291,16 +306,32 @@ public class SpriteProvider {
 		return blockList;
 	}
 	private ArrayList getElseList(ArrayList list) {
+		
 		ArrayList blockList = null;
-		JavaMarioNode n = (JavaMarioNode) list.get(4);
+		
+		// si no tiene parte else la lista tiene 4 elementos (expresion, listaExpresion, then, listaThen)
+		// La parte else siempre esta en la posición 4, si es un block se devuelve el contenido del block (la lista en la posición 5) si no, se crea una lista y se mete el 4 y el 5.
 
-		if (n.getNodeType() != ASTNode.BLOCK) {
-			blockList = new ArrayList();
-			blockList.add(list.get(4));
-			blockList.add(list.get(5));
-		} else {
-		    blockList = (ArrayList) list.get(5);
-		}		
-		return blockList;
+		if (list.size() == 4) 
+		{ 
+			return blockList;
+		} 
+		else 
+		{
+			JavaMarioNode n = (JavaMarioNode) list.get(4);
+
+			if (n.getNodeType() != ASTNode.BLOCK) {
+				blockList = new ArrayList();
+				blockList.add(list.get(4));
+				blockList.add(list.get(5));
+			} else {
+			    blockList = (ArrayList) list.get(5);
+			}		
+			return blockList;	
+		}
+		
+				
+		
+		
 	}
 }
