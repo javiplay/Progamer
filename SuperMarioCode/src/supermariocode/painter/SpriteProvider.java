@@ -20,13 +20,13 @@ public class SpriteProvider {
 	
 	public SpriteComposite expression(int x, int y){
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.normalYellowBox, 0, 3);
+		comp.addSprite(comp.normalYellowBox, 0, 2);
 		return comp;		
 	}
 	
 	public SpriteComposite local(int x, int y){
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.questionYellowBox, 0, 3);
+		comp.addSprite(comp.questionYellowBox, 0, 2);
 		return comp;		
 	}
 	public SpriteComposite constructorLeft(int x, int y){		
@@ -61,7 +61,21 @@ public class SpriteProvider {
 		comp.addSprite(comp.landMountainSoil, 0, 1);
 		return comp;
 	}
-	
+	public SpriteComposite mountain(int x, int y){		
+		SpriteComposite comp = new SpriteComposite(x, y);
+		comp.addSprite(comp.landMountain, 0, 0);		
+		return comp;
+	}
+	public SpriteComposite leftMountain(int x, int y){		
+		SpriteComposite comp = new SpriteComposite(x, y);
+		comp.addSprite(comp.landMountainLeftSide, 0, 0);		
+		return comp;
+	}
+	public SpriteComposite rightMountain(int x, int y){		
+		SpriteComposite comp = new SpriteComposite(x, y);
+		comp.addSprite(comp.landMountainRightSide, 0, 0);		
+		return comp;
+	}
 	public SpriteComposite ifRight(int x, int y){		
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountainRightSide, 0, 0);
@@ -151,6 +165,8 @@ public class SpriteProvider {
 							soilx++;
 						}
 						x = soilx;
+					} else {
+						y-=comp.leny;
 					}
 					// añadimos el final del método
 					comp = constructorRight(x, y);
@@ -193,20 +209,22 @@ public class SpriteProvider {
 					break;
 			case ASTNode.IF_STATEMENT:
 				
+				
+				int initx = x;
+				int inity = y;
 				// pintar primero la parte else si la hay
 				ArrayList elseList = getElseList(list);
-				Point elseLength = new Point(0,0);
-				
+				Point elseLength = new Point(0,0);				
 				x+=2;
 				if (elseList != null) {					
 					if (!elseList.isEmpty()) {
-						elseLength = getSprites(elseList, x, y);
-						// añadir al principio del elemento los cuadrados del fondo
-						// crear el metodo elem.insertCompositeAt(0,comp)
+						elseLength = getSprites(elseList, x, y);						 												
 						System.out.println("ELSE:"+elseLength.x+"x"+elseLength.y);						
 					}						
-				}
+				}											
 				x-=2;
+				
+				
 				
 				y += elseLength.y;
 				
@@ -234,16 +252,39 @@ public class SpriteProvider {
 					}
 					x = soilx;
 				}
+				
+				
 				// final terrain
 				comp = ifRight(x, y);
 				x += comp.lenx;
 				elem.addComposite(comp);
 				
+				// rellenamos el fondo del else				
+				for (int posx=0; posx< soilLength; posx++)
+				{
+					for (int posy=0; posy< elseLength.y; posy++) 
+					{
+						comp = mountain(initx+2+posx, inity+posy);
+						elem.addComposite(0, comp);
+					}
+				}
+				for (int posy=0; posy< elseLength.y; posy++) 
+				{
+					comp = leftMountain(initx+1, inity+posy);
+					elem.addComposite(0, comp);
+				}
+				for (int posy=0; posy< elseLength.y; posy++) 
+				{
+					comp = rightMountain(initx+soilLength+2, inity+posy);
+					elem.addComposite(0, comp);
+				}
+				
+				// ajustar 
 				length.x += soilLength+4;
 				if (y + thenLength.y > length.y) {
 					length.y = y + thenLength.y; // leny
 				}																								
-				
+				y-=elseLength.y;
 				break;
 			
 			case ASTNode.FOR_STATEMENT:
@@ -329,8 +370,6 @@ public class SpriteProvider {
 			}		
 			return blockList;	
 		}
-		
-				
 		
 		
 	}

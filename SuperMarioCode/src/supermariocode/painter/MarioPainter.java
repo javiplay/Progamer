@@ -33,7 +33,8 @@ public class MarioPainter  {
     			MarioCodeView.class.getResourceAsStream("background1.jpg"));
         this.base = base;
         this.g = g;
-        g.drawImage(imgBG, 0, 0);
+       // g.drawImage(imgBG, 0, 0);
+       
         
 	}
 	
