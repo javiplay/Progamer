@@ -109,11 +109,11 @@ public class SpriteProvider {
 	public Point getSprites(ArrayList tree, int x, int y){
 		
 		
-		// Devolver el tamaño total de la composición
+		// Devolver el tamaï¿½o total de la composiciï¿½n
 		Point length = new Point(0,0);				
 		
 		for (int i = 0; i<tree.size(); i+=2) {						
-			// el arbol está compuesto por pares (JavaMarioNode, ArrayList)
+			// el arbol estï¿½ compuesto por pares (JavaMarioNode, ArrayList)
 			
 			JavaMarioNode elem = (JavaMarioNode) tree.get(i);
 			ArrayList list = (ArrayList) tree.get(i+1);			
@@ -142,18 +142,18 @@ public class SpriteProvider {
 					// coger la lista de block
 					list = FindBlock(list);
 				
-					// añadir la parte izquierda del suelo
+					// aï¿½adir la parte izquierda del suelo
 					comp = constructorLeft(x, y);
 					elem.addComposite(comp);
 					
-					// ajustamos las coodenadas del lápiz
+					// ajustamos las coodenadas del lï¿½piz
 					x += comp.lenx;
 					y += comp.leny;					
 					
-					// añadimos el suelo del método
+					// aï¿½adimos el suelo del mï¿½todo
 					Point methodLength = new Point(0,0); 						
 					if (!list.isEmpty()) {
-						// obtener la composición del método recursivamente
+						// obtener la composiciï¿½n del mï¿½todo recursivamente
 						methodLength = getSprites(list, x, y);
 						System.out.println("METHOD:"+methodLength.x+"x"+methodLength.y);
 						
@@ -168,16 +168,16 @@ public class SpriteProvider {
 					} else {
 						y-=comp.leny;
 					}
-					// añadimos el final del método
+					// aï¿½adimos el final del mï¿½todo
 					comp = constructorRight(x, y);
 					elem.addComposite(comp);
 					
-					// establecemos el tamaño final de esta composición de sprites
+					// establecemos el tamaï¿½o final de esta composiciï¿½n de sprites
 					length.x += methodLength.x+2+2; // el contenido horizontal del metodo mas el cuadro de inicio y el de final
 					if (2 + methodLength.y > length.y) {
 						length.y = 2 + methodLength.y; // leny
 					}																								
-					x+=3; // dejamos un hueco entre métodos de tamaño 2					
+					x+=3; // dejamos un hueco entre mï¿½todos de tamaï¿½o 2					
 					break;
 					
 			case ASTNode.EXPRESSION_STATEMENT:
@@ -213,6 +213,7 @@ public class SpriteProvider {
 				int initx = x;
 				int inity = y;
 				// pintar primero la parte else si la hay
+				boolean elseExists = false;
 				ArrayList elseList = getElseList(list);
 				Point elseLength = new Point(0,0);				
 				x+=2;
@@ -223,18 +224,29 @@ public class SpriteProvider {
 					}						
 				}											
 				x-=2;
+				if (elseLength.x == 0 && elseLength.y == 0)
+					elseExists = false;
+				else 
+					elseExists = true;
 				
 				
+				if (!elseExists) {
+					y += elseLength.y;
+				}
+				else {
+					y += elseLength.y-2;
+				}
 				
-				y += elseLength.y;
 				
 				
 				
 				ArrayList thenList = getThenList(list);
 				comp = ifLeft(x, y);
 				elem.addComposite(comp);
-				x += comp.lenx;
-				y += comp.leny;
+				
+					x += comp.lenx;
+					y += comp.leny;
+				
 				Point thenLength = new Point(0,0); // the size of the corresponding part of stage
 				int soilLength = 0;
 				if (!thenList.isEmpty()) {					
@@ -262,18 +274,18 @@ public class SpriteProvider {
 				// rellenamos el fondo del else				
 				for (int posx=0; posx< soilLength; posx++)
 				{
-					for (int posy=0; posy< elseLength.y; posy++) 
+					for (int posy=0; posy< elseLength.y-2; posy++) 
 					{
 						comp = mountain(initx+2+posx, inity+posy);
 						elem.addComposite(0, comp);
 					}
 				}
-				for (int posy=0; posy< elseLength.y; posy++) 
+				for (int posy=0; posy< elseLength.y-2; posy++) 
 				{
 					comp = leftMountain(initx+1, inity+posy);
 					elem.addComposite(0, comp);
 				}
-				for (int posy=0; posy< elseLength.y; posy++) 
+				for (int posy=0; posy< elseLength.y-2; posy++) 
 				{
 					comp = rightMountain(initx+soilLength+2, inity+posy);
 					elem.addComposite(0, comp);
@@ -351,7 +363,7 @@ public class SpriteProvider {
 		ArrayList blockList = null;
 		
 		// si no tiene parte else la lista tiene 4 elementos (expresion, listaExpresion, then, listaThen)
-		// La parte else siempre esta en la posición 4, si es un block se devuelve el contenido del block (la lista en la posición 5) si no, se crea una lista y se mete el 4 y el 5.
+		// La parte else siempre esta en la posiciï¿½n 4, si es un block se devuelve el contenido del block (la lista en la posiciï¿½n 5) si no, se crea una lista y se mete el 4 y el 5.
 
 		if (list.size() == 4) 
 		{ 
