@@ -15,7 +15,11 @@ import supermariocode.views.MarioCodeView;
 
 
 
-
+/**
+ * Esto es una prueba de subir los cambios
+ * @author Javier
+ *
+ */
 
 public class Painter  {
 	
