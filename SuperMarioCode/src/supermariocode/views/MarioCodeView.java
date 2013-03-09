@@ -344,7 +344,11 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										GC gc = new GC(image1);
 										MarioPainter painter = new MarioPainter(size.y*16+32, gc);
 										myCanvas.setBackgroundImage(painter.imgBG);
-										painter.paintTree(visitor.tree);																			
+										painter.paintTree(visitor.tree);	
+										
+										//Método nuevo:
+										painter.paintTreeDebug(visitor.tree);
+										
 										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
 										gc.dispose();
 										painter.img.dispose();

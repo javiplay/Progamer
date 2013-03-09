@@ -59,16 +59,43 @@ public class MarioPainter  {
 		for (int i = 0; i<l.size(); i+=2) {
 			JavaMarioNode node = (JavaMarioNode) l.get(i);
 			ArrayList content = (ArrayList) l.get(i+1);
+			
 			for (SpriteComposite sc: node.compList) {
 				for (Sprite s: sc.spriteList) {
 					g.drawImage(img, s.x, s.y, scale, scale, s.posx*scale, base - (s.posy+1)*scale, scale, scale);
 				}
 			}
+			
 			if (!content.isEmpty()) {
 				paintTree(content);
 			}
 			
 		}		
+	}
+	
+	public void paintTreeDebug(ArrayList l) {
+		for (int i = 0; i<l.size(); i+=2) {
+			JavaMarioNode node = (JavaMarioNode) l.get(i);
+			ArrayList content = (ArrayList) l.get(i+1);
+			
+			for (SpriteComposite sc: node.compList) {
+				//Tomamos el spritecomposite para obtener las coordenadas para la generación de rectangulos:
+				System.out.println(sc.spriteList);
+				System.out.println(sc);
+				int xx = sc.posx*scale;
+				int yy = base - (sc.posy+sc.leny)*scale;
+				int lxx = sc.lenx*scale;
+				int lyy = sc.leny*scale;
+				g.drawRectangle(xx, yy, lxx, lyy);
+				System.out.println(xx/scale +" " + yy/scale +" " + lxx/scale +" " + lyy/scale);
+					
+			}
+			
+			if (!content.isEmpty()) {
+				paintTreeDebug(content);
+			}
+		}	
+		
 	}
 	
 	

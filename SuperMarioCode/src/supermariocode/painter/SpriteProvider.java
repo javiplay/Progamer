@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.graphics.Point;
 
-public class SpriteProvider {
+public class SpriteProvider extends Applet{
 	
 	
 	public SpriteProvider() {			
@@ -200,6 +200,7 @@ public class SpriteProvider {
 					break;
 					
 			case ASTNode.EXPRESSION_STATEMENT:
+				
 					comp = expression(x, y);						 
 					length.x += comp.lenx; // lenx
 					if (comp.leny>length.y) {
@@ -209,6 +210,7 @@ public class SpriteProvider {
 					x += comp.lenx;
 					break;
 			case ASTNode.VARIABLE_DECLARATION_STATEMENT:
+					
 					comp = local(x, y);						 
 					length.x += comp.lenx; // lenx
 					if (comp.leny>length.y) {
@@ -345,6 +347,7 @@ public class SpriteProvider {
 		}
 		return length;
 	}
+
 
 	private ArrayList FindBlock(ArrayList list) {
 		int i = 0;

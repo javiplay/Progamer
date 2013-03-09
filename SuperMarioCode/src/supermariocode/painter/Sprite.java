@@ -22,7 +22,10 @@ public class Sprite {
 	//origen abajo izquierda
 	public int x;
 	public int y;
-	private String name;
+	
+	//Cambiado a publico para poder verlo en otras clases:
+	public String name;
+	
 	// offsets in mario world coords (units in sprites)
 	int posx;
 	int posy;

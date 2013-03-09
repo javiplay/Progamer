@@ -74,11 +74,14 @@ public class Painter  {
 		
 			Color c = new Color(g.getDevice(), 248, 224, 176);
 			g.setBackground(c);
+			
 			g.fillRectangle(new Rectangle(0, 0, MarioCodeView.width, MarioCodeView.height));
 			if (tree!= null) {
 				paintTree(tree, g);
-			}
+			}			
+			
 			g.dispose();
+			
 		
 	}
 	
