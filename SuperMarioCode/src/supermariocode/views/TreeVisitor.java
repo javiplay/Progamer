@@ -46,7 +46,7 @@ class TreeVisitor extends ASTVisitor {
          name = name.substring(name.lastIndexOf('.')+1);
          
          ArrayList current = (ArrayList) stack.peek();
-         JavaMarioNode marioNode = new JavaMarioNode(name, node.getNodeType());       
+         JavaMarioNode marioNode = new JavaMarioNode(name, node.getNodeType(), node.getStartPosition());       
          current.add(marioNode);
                   
          ArrayList children = new ArrayList();
