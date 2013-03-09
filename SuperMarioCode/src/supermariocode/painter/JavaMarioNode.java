@@ -24,11 +24,24 @@ public class JavaMarioNode {
 	String name;
 	int nodeType;
 	ArrayList<SpriteComposite> compList;
-	public JavaMarioNode(String name, int nodeType){
+	int lineNumber;
+	
+	public JavaMarioNode(String name, int nodeType, int _linenumber){
 		this.name = name;
 		this.nodeType = nodeType;
 		this.compList = new ArrayList<SpriteComposite>();
+		this.lineNumber = _linenumber;
+		
 	}
+	
+	public int getLineNumber(){
+		return lineNumber;
+	}
+	
+	public void setLineNumber(int currLine){
+		this.lineNumber = currLine;
+	}
+	
 	public int getNodeType() {
 		return nodeType;
 	}
