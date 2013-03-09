@@ -311,6 +311,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 					try {
 						if (project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
 
+							//Obtiene la lista de paquetes de proyectos java
 							IPackageFragment[] packages = JavaCore.create(project)
 									.getPackageFragments();
 							// parse(JavaCore.create(project));
@@ -318,7 +319,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 								if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
 									for (ICompilationUnit unit : mypackage
 											.getCompilationUnits()) {
-										
+										//AST Arbol sintactico
 										// Now create the AST for the ICompilationUnits
 										CompilationUnit parse = parse(unit);
 										TreeVisitor visitor = new TreeVisitor();

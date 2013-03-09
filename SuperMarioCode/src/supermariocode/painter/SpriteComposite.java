@@ -55,6 +55,8 @@ public class SpriteComposite {
 	public Sprite tubeGreenLeftSideDown = new Sprite("tubeGreenLeftSideDown",1,195);
 	public Sprite tubeGreenRightSideUp = new Sprite("tubeGreenRightSideUp",18,178);
 	public Sprite tubeGreenRihtSideDown = new Sprite("tubeGreenRihtSideDown",18,195);
+	//TODO, que posicion del sprite corresponde al mario
+	
 	
 	public ArrayList<Sprite> spriteList;
 		
