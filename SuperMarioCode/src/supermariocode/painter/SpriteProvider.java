@@ -45,7 +45,7 @@ public class SpriteProvider extends Applet{
 	
 	public SpriteComposite local(int x, int y){
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.questionYellowBox, 0, 2);
+		comp.addSprite(comp.questionYellowBox, 0, 1);
 		return comp;		
 	}
 	public SpriteComposite constructorLeft(int x, int y){		
@@ -120,7 +120,6 @@ public class SpriteProvider extends Applet{
 		comp.addSprite(comp.tubeGreenRightSideUp, 2, 1);
 		comp.addSprite(comp.noneSprite, 3, 0);
 		
-		
 		return comp;
 	}
 	
@@ -176,7 +175,10 @@ public class SpriteProvider extends Applet{
 						methodLength = getSprites(list, x, y);
 						System.out.println("METHOD:"+methodLength.x+"x"+methodLength.y);
 						
+						
+						
 						y -= 2;
+						//x+= methodLength.x;
 						int soilx = x;
 						while (soilx < x + methodLength.x) {
 							comp = constructorCenter(soilx, y);
@@ -321,22 +323,38 @@ public class SpriteProvider extends Applet{
 				break;
 			
 			case ASTNode.FOR_STATEMENT:
-			
+				
 				list = FindBlock(list);
 				// initial constructor/method terrain
 				comp = forTube(x, y);
+				int firsttubesizex = comp.lenx;
 				elem.addComposite(comp);				
 				x += comp.lenx;
+				y += comp.leny;
 				Point forLength = new Point(0,0);				
 				forLength = getSprites(list, x, y);
 				System.out.println("FOR:"+forLength.x+"x"+forLength.y);
 				
 				
 				x += forLength.x;
+				y-= comp.leny;
 				comp = forTube(x, y);
 				elem.addComposite(comp);
 				
-				x += comp.lenx;
+				//Start painting floor inside for loop
+				x -= forLength.x; 
+				int soilx = x -1; //pointer to start painting the floor
+				//comp = constructorLeft(x-1, y);
+				//elem.addComposite(comp);
+				while (soilx <= x + forLength.x) {
+					comp = constructorCenter(soilx, y);
+					elem.addComposite(comp);
+					soilx++;
+				}
+				//x = soilx;
+				
+				
+				x += soilx + 4; //incremento para poder seguir pintando tras el segundo tubo, 4 es el ancho del tubo
 				
 				length.x += forLength.x+8;
 				if (y + forLength.y > length.y) {
