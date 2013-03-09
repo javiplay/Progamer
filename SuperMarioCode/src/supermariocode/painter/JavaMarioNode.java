@@ -20,20 +20,24 @@ package supermariocode.painter;
 
 import java.util.ArrayList;
 
+import org.eclipse.swt.graphics.Rectangle;
+
 public class JavaMarioNode {
 	String name;
 	int nodeType;
 	ArrayList<SpriteComposite> compList;
 	int lineNumber;
+	Rectangle rectangle;
 	
 	public JavaMarioNode(String name, int nodeType, int _linenumber){
 		this.name = name;
 		this.nodeType = nodeType;
 		this.compList = new ArrayList<SpriteComposite>();
 		this.lineNumber = _linenumber;
+		rectangle = new Rectangle(0, 0, 0, 0);
 		
 	}
-	
+
 	public int getLineNumber(){
 		return lineNumber;
 	}
@@ -57,4 +61,30 @@ public class JavaMarioNode {
 		//return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
 		return name;
 	}
+	
+	//Devolvemos las posiciones del SpriteComposite:
+	void calculateBounds(){
+		//rectangle.x = 
+		for(int i=0; i < compList.size(); i++){
+			//componente x inicial:
+			if( compList.get(i).posx < rectangle.x) {
+				rectangle.x = compList.get(i).posx;	
+			}	
+			//componente y inicial:
+			if( compList.get(i).posy < rectangle.y) {
+				rectangle.y = compList.get(i).posy;	
+			}
+			//componente x final:
+			if( (compList.get(i).posx + compList.get(i).lenx)  > rectangle.width) {
+				rectangle.width = compList.get(i).posx + compList.get(i).lenx;	
+			}	
+			//componente y final:
+			if( (compList.get(i).posy + compList.get(i).leny)  > rectangle.height) {
+				rectangle.height = compList.get(i).posy + compList.get(i).leny;	
+			}
+		}
+		
+
+	}
+	
 }

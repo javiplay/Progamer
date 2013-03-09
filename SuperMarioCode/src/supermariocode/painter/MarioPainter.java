@@ -23,7 +23,9 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
@@ -42,6 +44,18 @@ public class MarioPainter  {
 	public Image imgBG;
 	public GC g;
 	
+	//Para añadir colores a los rectangulos:
+	Device d;
+	Color magenta;
+	Color green;
+	Color yellow;
+	Color red;
+	Color black;
+	Color cyan;
+	
+	ArrayList colores;
+	
+	
 	public MarioPainter(int base, GC g) {
 		
         img = new Image(MarioCodeView.myCanvas.getDisplay(),
@@ -50,9 +64,28 @@ public class MarioPainter  {
     			MarioCodeView.class.getResourceAsStream("background1.jpg"));
         this.base = base;
         this.g = g;
-       // g.drawImage(imgBG, 0, 0);
-       
         
+        //Para incluir colores a los rectangulos:
+        d = g.getDevice();
+        //Definimos colores:
+        magenta = d.getSystemColor(SWT.COLOR_MAGENTA);
+        green = d.getSystemColor(SWT.COLOR_DARK_GREEN);
+        yellow = d.getSystemColor(SWT.COLOR_YELLOW);
+        red = d.getSystemColor(SWT.COLOR_RED);
+        black = d.getSystemColor(SWT.COLOR_BLACK);
+        cyan = d.getSystemColor(SWT.COLOR_CYAN);
+        
+        //Añadimos a un array los diferentes colores:
+        colores = new ArrayList();
+        colores.add(black);
+        colores.add(cyan);
+        colores.add(green);
+        colores.add(red);
+        colores.add(magenta);
+        colores.add(yellow);
+        
+       // g.drawImage(imgBG, 0, 0);
+ 
 	}
 	
 	public void paintTree(ArrayList l) {
@@ -73,23 +106,38 @@ public class MarioPainter  {
 		}		
 	}
 	
+	
+	//Método que agrega rectangulos para el modo debug:
 	public void paintTreeDebug(ArrayList l) {
 		for (int i = 0; i<l.size(); i+=2) {
 			JavaMarioNode node = (JavaMarioNode) l.get(i);
 			ArrayList content = (ArrayList) l.get(i+1);
+
+			node.calculateBounds();
 			
-			for (SpriteComposite sc: node.compList) {
+			//System.out.println(node.rectangle.x+" "+ node.rectangle.y+" "+node.rectangle.width+" "+
+			//node.rectangle.height);
+
+			g.drawRectangle(node.rectangle.x*scale, base - (node.rectangle.height + node.rectangle.y)*scale, 
+					node.rectangle.width*scale, node.rectangle.height*scale);
+
+			//Variable que indica el índice del arraylist:
+			int index = 1;
+
+			/*for (SpriteComposite sc: node.compList) {
 				//Tomamos el spritecomposite para obtener las coordenadas para la generación de rectangulos:
 				System.out.println(sc.spriteList);
 				System.out.println(sc);
-				int xx = sc.posx*scale;
-				int yy = base - (sc.posy+sc.leny)*scale;
-				int lxx = sc.lenx*scale;
-				int lyy = sc.leny*scale;
-				g.drawRectangle(xx, yy, lxx, lyy);
-				System.out.println(xx/scale +" " + yy/scale +" " + lxx/scale +" " + lyy/scale);
-					
-			}
+				
+				//g.drawRectangle(sc.posx*scale, base - (sc.posy+sc.leny)*scale, sc.lenx*scale, sc.leny*scale);
+			     
+				//g.setLineStyle(SWT.LINE_DOT);
+				/*g.setLineWidth(2);
+				g.setForeground((Color) colores.get(index));
+				index++;
+				if(index > colores.size()){
+					index = 1;
+				}*/
 			
 			if (!content.isEmpty()) {
 				paintTreeDebug(content);
