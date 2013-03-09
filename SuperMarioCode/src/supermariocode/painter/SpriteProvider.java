@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.graphics.Point;
 
-public class SpriteProvider extends Applet{
+public class SpriteProvider{
 	
 	
 	public SpriteProvider() {			
