@@ -328,8 +328,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										System.out.println(l);
 										
 										SpriteProvider sp = new SpriteProvider();
-										Point size = sp.getSprites(visitor.tree, 0, 0);
-										System.out.println(visitor.tree.toString());
+										Point size = sp.getSprites(visitor.root, 0, 0);
+										System.out.println(visitor.root.toString());
 										System.out.println("X="+size.x+",Y="+size.y);
 										
 										//pintar
@@ -345,10 +345,10 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										GC gc = new GC(image1);
 										MarioPainter painter = new MarioPainter(size.y*16+32, gc);
 										myCanvas.setBackgroundImage(painter.imgBG);
-										painter.paintTree(visitor.tree);	
+										painter.paintTree(visitor.root);	
 										
 										//Método nuevo:
-										painter.paintTreeDebug(visitor.tree);
+										painter.paintTreeDebug(visitor.root);
 										
 										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
 										gc.dispose();

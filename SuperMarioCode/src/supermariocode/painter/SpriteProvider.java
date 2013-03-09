@@ -124,26 +124,31 @@ public class SpriteProvider{
 	}
 	
 	
-	public Point getSprites(ArrayList tree, int x, int y){
+	public Point getSprites(JavaMarioNode elem, int x, int y){
 		
 		
 		// Devolver el tama�o total de la composici�n
 		Point length = new Point(0,0);				
+		ArrayList<JavaMarioNode> list =  elem.children;			
 		
-		for (int i = 0; i<tree.size(); i+=2) {						
-			// el arbol est� compuesto por pares (JavaMarioNode, ArrayList)
-			
-			JavaMarioNode elem = (JavaMarioNode) tree.get(i);
-			ArrayList list = (ArrayList) tree.get(i+1);			
-			
+		for (int i = 0; i<elem.children.size(); i++) {						
+		
 			
 			SpriteComposite comp;
 			switch (elem.getNodeType()) {
+			
+
+			case -1:
+				return getSprites(list.get(i), x, y);
 			case ASTNode.COMPILATION_UNIT:
-				return getSprites(list, x, y);
+				return getSprites(list.get(i), x, y);
+			case ASTNode.MODIFIER:
+				 return getSprites(list.get(i), x, y);
+				 
 				
 			case ASTNode.TYPE_DECLARATION:
-				return getSprites(list, x, y);
+				getSprites(list.get(i), x, y);
+				break;
 				
 			case ASTNode.FIELD_DECLARATION:
 					comp = field(x, y);						 					
@@ -156,9 +161,18 @@ public class SpriteProvider{
 					break;				
 			
 			case ASTNode.METHOD_DECLARATION:
+				
+			
 					
 					// coger la lista de block
-					list = FindBlock(list);
+				    for (JavaMarioNode child: list)
+				    {
+				      if (child.getNodeType() == ASTNode.BLOCK) {
+				    	  list = child.children;
+				    	  break;
+				      }
+				    }
+					//list = FindBlock(list);
 				
 					// a�adir la parte izquierda del suelo
 					comp = constructorLeft(x, y);
@@ -172,7 +186,7 @@ public class SpriteProvider{
 					Point methodLength = new Point(0,0); 						
 					if (!list.isEmpty()) {
 						// obtener la composici�n del m�todo recursivamente
-						methodLength = getSprites(list, x, y);
+						methodLength = getSprites(list.get(i), x, y);
 						System.out.println("METHOD:"+methodLength.x+"x"+methodLength.y);
 						
 						
@@ -237,12 +251,12 @@ public class SpriteProvider{
 				int inity = y;
 				// pintar primero la parte else si la hay
 				boolean elseExists = false;
-				ArrayList elseList = getElseList(list);
+				ArrayList<JavaMarioNode> elseList = getElseList(list);
 				Point elseLength = new Point(0,0);				
 				x+=2;
 				if (elseList != null) {					
 					if (!elseList.isEmpty()) {
-						elseLength = getSprites(elseList, x, y);						 												
+						elseLength = getSprites(elseList.get(i), x, y);						 												
 						System.out.println("ELSE:"+elseLength.x+"x"+elseLength.y);						
 					}						
 				}											
@@ -263,7 +277,7 @@ public class SpriteProvider{
 				
 				
 				
-				ArrayList thenList = getThenList(list);
+				ArrayList<JavaMarioNode> thenList = getThenList(list);
 				comp = ifLeft(x, y);
 				elem.addComposite(comp);
 				
@@ -273,7 +287,7 @@ public class SpriteProvider{
 				Point thenLength = new Point(0,0); // the size of the corresponding part of stage
 				int soilLength = 0;
 				if (!thenList.isEmpty()) {					
-					thenLength = getSprites(thenList, x, y);
+					thenLength = getSprites(thenList.get(i), x, y);
 					System.out.println("THEN:"+thenLength.x+"x"+thenLength.y);
 					
 					y -= 2;
@@ -324,7 +338,7 @@ public class SpriteProvider{
 			
 			case ASTNode.FOR_STATEMENT:
 				
-				list = FindBlock(list);
+				//list = FindBlock(list);
 				// initial constructor/method terrain
 				comp = forTube(x, y);
 				int firsttubesizex = comp.lenx;
@@ -332,7 +346,7 @@ public class SpriteProvider{
 				x += comp.lenx;
 				y += comp.leny;
 				Point forLength = new Point(0,0);				
-				forLength = getSprites(list, x, y);
+				forLength = getSprites(list.get(i), x, y);
 				System.out.println("FOR:"+forLength.x+"x"+forLength.y);
 				
 				
@@ -360,14 +374,17 @@ public class SpriteProvider{
 				if (y + forLength.y > length.y) {
 					length.y = y + forLength.y; // leny
 				}																								
-				break;			
+				break;
+				default:
+					return getSprites(list.get(i), x, y);
+
 			}			
 		}
 		return length;
 	}
 
-
-	private ArrayList FindBlock(ArrayList list) {
+/*
+	private JavaMarioNode FindBlock(JavaMarioNode list) {
 		int i = 0;
 		boolean found = false;
 		ArrayList blockList = null;
@@ -381,6 +398,7 @@ public class SpriteProvider{
 		}
 		return blockList;
 	}
+	*/
 	private ArrayList getThenList(ArrayList list) {
 		
 		

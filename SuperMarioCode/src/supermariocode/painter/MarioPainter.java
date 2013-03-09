@@ -88,30 +88,27 @@ public class MarioPainter  {
  
 	}
 	
-	public void paintTree(ArrayList l) {
-		for (int i = 0; i<l.size(); i+=2) {
-			JavaMarioNode node = (JavaMarioNode) l.get(i);
-			ArrayList content = (ArrayList) l.get(i+1);
+	public void paintTree(JavaMarioNode mn) {
+		
+			ArrayList<JavaMarioNode> content = mn.children;
 			
-			for (SpriteComposite sc: node.compList) {
+			for (SpriteComposite sc: mn.compList) {
 				for (Sprite s: sc.spriteList) {
 					g.drawImage(img, s.x, s.y, scale, scale, s.posx*scale, base - (s.posy+1)*scale, scale, scale);
 				}
 			}
-			
-			if (!content.isEmpty()) {
-				paintTree(content);
+			for (JavaMarioNode child: content){
+				paintTree(child);
 			}
-			
-		}		
+					
 	}
 	
 	
 	//Método que agrega rectangulos para el modo debug:
-	public void paintTreeDebug(ArrayList l) {
-		for (int i = 0; i<l.size(); i+=2) {
-			JavaMarioNode node = (JavaMarioNode) l.get(i);
-			ArrayList content = (ArrayList) l.get(i+1);
+	public void paintTreeDebug(JavaMarioNode l) {
+		for (int i = 0; i<l.children.size(); i+=2) {
+			JavaMarioNode node = l;
+			ArrayList<JavaMarioNode> content = l.children;
 
 			node.calculateBounds();
 			
@@ -139,9 +136,10 @@ public class MarioPainter  {
 					index = 1;
 				}*/
 			
-			if (!content.isEmpty()) {
-				paintTreeDebug(content);
+			for (JavaMarioNode child: content){
+					paintTreeDebug(child);
 			}
+			
 		}	
 		
 	}

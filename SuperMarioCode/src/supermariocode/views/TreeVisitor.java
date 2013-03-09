@@ -27,15 +27,15 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import supermariocode.painter.JavaMarioNode;
 
 class TreeVisitor extends ASTVisitor {
-      ArrayList tree;
+      JavaMarioNode root;
       Stack stack;
       
       
       public TreeVisitor(){
-    	  super();
-    	  tree = new ArrayList();
+    	  super();    	
+    	  root = new JavaMarioNode("ROOT", -1, -1);
     	  stack = new Stack();
-    	  stack.push(tree);
+    	  stack.push(root);
       }
             
       public void preVisit(ASTNode node) {         
@@ -45,20 +45,19 @@ class TreeVisitor extends ASTVisitor {
     	 String name = node.getClass().getName();
          name = name.substring(name.lastIndexOf('.')+1);
          
-         ArrayList current = (ArrayList) stack.peek();
-         JavaMarioNode marioNode = new JavaMarioNode(name, node.getNodeType(), node.getStartPosition());       
-         current.add(marioNode);
-                  
-         ArrayList children = new ArrayList();
-         current.add(children);
-         stack.push(children);                           
+         JavaMarioNode current = (JavaMarioNode) stack.peek();
+         JavaMarioNode child =  new JavaMarioNode(name, node.getNodeType(), node.getStartPosition());
+         current.children.add(child);       
+                   
+         stack.push(child);                           
       }
       
       public void postVisit(ASTNode node) {
     	  stack.pop();
       }
       public String toString() {
-    	  return tree.toString();
+    	  
+    	  return root.toString();
       }
    }
   

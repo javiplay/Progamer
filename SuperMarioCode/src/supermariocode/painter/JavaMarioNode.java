@@ -28,6 +28,7 @@ public class JavaMarioNode {
 	ArrayList<SpriteComposite> compList;
 	int lineNumber;
 	Rectangle rectangle;
+	public ArrayList<JavaMarioNode> children;
 	
 	public JavaMarioNode(String name, int nodeType, int _linenumber){
 		this.name = name;
@@ -35,7 +36,7 @@ public class JavaMarioNode {
 		this.compList = new ArrayList<SpriteComposite>();
 		this.lineNumber = _linenumber;
 		rectangle = new Rectangle(0, 0, 0, 0);
-		
+		children = new ArrayList<JavaMarioNode>();
 	}
 
 	public int getLineNumber(){
@@ -59,7 +60,12 @@ public class JavaMarioNode {
 	}
 	public String toString(){
 		//return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
-		return name;
+		String str = name + " [";
+		for(JavaMarioNode mn: this.children) {
+			str+= " " + mn.toString();
+		}
+		str += " ]";
+		return str ;
 	}
 	
 	//Devolvemos las posiciones del SpriteComposite:
