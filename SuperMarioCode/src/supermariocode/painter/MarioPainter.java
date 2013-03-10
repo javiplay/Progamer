@@ -50,9 +50,11 @@ public class MarioPainter {
 	Color red;
 	Color black;
 	Color cyan;
+	Color white;
 
 	ArrayList colors;
-
+	int index = 0;
+	
 	public MarioPainter(int base, GC g) {
 
 		img = new Image(MarioCodeView.myCanvas.getDisplay(),
@@ -66,12 +68,13 @@ public class MarioPainter {
 		d = g.getDevice();
 		// Definimos colores:
 		magenta = d.getSystemColor(SWT.COLOR_MAGENTA);
-		green = d.getSystemColor(SWT.COLOR_DARK_GREEN);
+		green = d.getSystemColor(SWT.COLOR_GREEN);
 		yellow = d.getSystemColor(SWT.COLOR_YELLOW);
 		red = d.getSystemColor(SWT.COLOR_RED);
 		black = d.getSystemColor(SWT.COLOR_BLACK);
 		cyan = d.getSystemColor(SWT.COLOR_CYAN);
-
+		white = d.getSystemColor(SWT.COLOR_WHITE);
+		
 		// Añadimos a un array los diferentes colores:
 		colors = new ArrayList();
 		colors.add(black);
@@ -80,7 +83,7 @@ public class MarioPainter {
 		colors.add(red);
 		colors.add(magenta);
 		colors.add(yellow);
-		
+		colors.add(white);
 		// g.drawImage(imgBG, 0, 0);
 
 	}
@@ -103,23 +106,27 @@ public class MarioPainter {
 
 	}
 
-	// Método que agrega rectangulos para el modo debug:
+	// Método que agrega rectángulos para el modo debug:
 	public void paintTreeDebug(JavaMarioNode mn) {
 
-		
-
+		//Añadimos un estilo de línea a los rectángulos
 		g.setLineStyle(SWT.LINE_DOT);
 		g.setLineWidth(2);
+		//Asignamos el color:
+		g.setForeground((Color) colors.get(index));
+		//Lo dibujamos:
 		g.drawRectangle(mn.rectangle.x * scale, base - (mn.rectangle.y + mn.rectangle.height) * scale,
 				mn.rectangle.width * scale, mn.rectangle.height * scale);
-		/*g.setForeground((Color) colors.get(index));
-		index++;
-		if (index > colors.size()) {
-			index = 1;
-		}*/
-
+		
 		for (JavaMarioNode child : mn.children) {
+			
+			index = (index + 1)% colors.size();
 			paintTreeDebug(child);
+			
+			index--;
+			if (index < 0) {
+				index = colors.size()-1;
+			}
 		}
 
 	}
