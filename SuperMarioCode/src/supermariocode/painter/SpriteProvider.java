@@ -130,11 +130,14 @@ public class SpriteProvider {
 	}
 
 	public Rectangle getSprites(JavaMarioNode elem, int x, int y) {
-		System.out.println(elem.name + "  Posición: " + x + " " + y);
+		
 		// Devolver el tamaï¿½o total de la composiciï¿½n
 		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		
+		if(elem == null){
+			return boundingBox;	
+		}
 		ArrayList<JavaMarioNode> list = elem.children;
-
 		SpriteComposite comp;
 
 		switch (elem.getNodeType()) {
@@ -268,9 +271,11 @@ public class SpriteProvider {
 
 			int initx = x;
 			int inity = y;
-
-			JavaMarioNode elseNode = elem.children.get(2);
-
+			JavaMarioNode elseNode = null;
+			
+			if(elem.children.size() == 3){
+				elseNode = elem.children.get(2);
+			}
 			
 			Rectangle elseBox = getSprites(elseNode, x+1, y);
 
