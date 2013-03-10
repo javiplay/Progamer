@@ -60,12 +60,13 @@ public class JavaMarioNode {
 	}
 	public String toString(){
 		//return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
-		String str = name + " [";
+		/*String str = name + " [";
 		for(JavaMarioNode mn: this.children) {
 			str+= " " + mn.toString();
 		}
 		str += " ]";
-		return str ;
+		return str ;*/
+		return name;
 	}
 	
 	//Devolvemos las posiciones del SpriteComposite:
