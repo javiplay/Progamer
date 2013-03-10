@@ -20,16 +20,19 @@
 package supermariocode.views;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import supermariocode.painter.JavaMarioNode;
 
 class TreeVisitor extends ASTVisitor {
       JavaMarioNode root;
       Stack stack;
-      
+      Map<Integer, ArrayList<JavaMarioNode>> hm = new HashMap<Integer, ArrayList<JavaMarioNode>>();
       
       public TreeVisitor(){
     	  super();    	
@@ -40,17 +43,44 @@ class TreeVisitor extends ASTVisitor {
             
       public void preVisit(ASTNode node) {         
     	 // write the name of the node being visited
-    	  
-
+    	 
+    	 
     	 String name = node.getClass().getName();
          name = name.substring(name.lastIndexOf('.')+1);
          
          JavaMarioNode current = (JavaMarioNode) stack.peek();
-         JavaMarioNode child =  new JavaMarioNode(name, node.getNodeType(), node.getStartPosition());
-         current.children.add(child);       
-                   
-         stack.push(child);                           
+         CompilationUnit cu = (CompilationUnit)node.getRoot();
+         int codeLine = cu.getLineNumber(node.getStartPosition());
+         JavaMarioNode child =  new JavaMarioNode(name, node.getNodeType(), codeLine);
+         
+         //System.out.println("Linea: " + codeLine + " nombre: " + name);
+          
+         current.children.add(child);    
+         addToHashMap(codeLine, child);
+         
+         stack.push(child);      
       }
+      
+      public void addToHashMap(int codeLine, JavaMarioNode node){
+    	  
+    	  ArrayList<JavaMarioNode> nodes = hm.get(codeLine);
+    	  if(nodes==null){
+    		  nodes = new ArrayList<JavaMarioNode>();
+    		  nodes.add(node);
+    		  hm.put(codeLine, nodes);
+    	  }else{
+    		  nodes.add(node);
+    		  
+    		  
+    	  }		  
+    	  
+      }
+      
+      public ArrayList<JavaMarioNode> getNodes (int codeLine){
+    	  return hm.get(codeLine);
+      }
+      
+      
       
       public void postVisit(ASTNode node) {
     	  stack.pop();

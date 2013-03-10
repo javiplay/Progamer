@@ -324,6 +324,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										CompilationUnit parse = parse(unit);
 										TreeVisitor visitor = new TreeVisitor();
 										parse.accept(visitor);
+										System.out.println(" Nodos en linea 4: " + visitor.hm);
 										String l = visitor.toString();
 										System.out.println(l);
 										
@@ -505,7 +506,9 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 						@Override
 						public void caretMoved(CaretEvent event) {
 							// TODO Auto-generated method stub
-							System.out.println(event.caretOffset);
+							System.out.println("SOY EL CARACTER DEL CODIGO: " + event.caretOffset);
+							
+							int caracter = event.caretOffset;
 							
 						}
 					});
