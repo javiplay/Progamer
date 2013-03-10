@@ -14,9 +14,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    */
+ */
 package supermariocode.painter;
-
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,19 +31,18 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import supermariocode.views.MarioCodeView;
 
-public class MarioPainter  {
-	
+public class MarioPainter {
+
 	private static ArrayList tree;
-	
+
 	private static int scale = 16;
-	
-	
+
 	private int base;
 	public Image img;
 	public Image imgBG;
 	public GC g;
-	
-	//Para añadir colores a los rectangulos:
+
+	// Para añadir colores a los rectangulos:
 	Device d;
 	Color magenta;
 	Color green;
@@ -52,85 +50,78 @@ public class MarioPainter  {
 	Color red;
 	Color black;
 	Color cyan;
-	
-	ArrayList colores;
-	
-	
+
+	ArrayList colors;
+
 	public MarioPainter(int base, GC g) {
+
+		img = new Image(MarioCodeView.myCanvas.getDisplay(),
+				MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
+		imgBG = new Image(MarioCodeView.myCanvas.getDisplay(),
+				MarioCodeView.class.getResourceAsStream("background1.jpg"));
+		this.base = base;
+		this.g = g;
+
+		// Para incluir colores a los rectangulos:
+		d = g.getDevice();
+		// Definimos colores:
+		magenta = d.getSystemColor(SWT.COLOR_MAGENTA);
+		green = d.getSystemColor(SWT.COLOR_DARK_GREEN);
+		yellow = d.getSystemColor(SWT.COLOR_YELLOW);
+		red = d.getSystemColor(SWT.COLOR_RED);
+		black = d.getSystemColor(SWT.COLOR_BLACK);
+		cyan = d.getSystemColor(SWT.COLOR_CYAN);
+
+		// Añadimos a un array los diferentes colores:
+		colors = new ArrayList();
+		colors.add(black);
+		colors.add(cyan);
+		colors.add(green);
+		colors.add(red);
+		colors.add(magenta);
+		colors.add(yellow);
 		
-        img = new Image(MarioCodeView.myCanvas.getDisplay(),
-    			MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
-        imgBG = new Image(MarioCodeView.myCanvas.getDisplay(),
-    			MarioCodeView.class.getResourceAsStream("background1.jpg"));
-        this.base = base;
-        this.g = g;
-        
-        //Para incluir colores a los rectangulos:
-        d = g.getDevice();
-        //Definimos colores:
-        magenta = d.getSystemColor(SWT.COLOR_MAGENTA);
-        green = d.getSystemColor(SWT.COLOR_DARK_GREEN);
-        yellow = d.getSystemColor(SWT.COLOR_YELLOW);
-        red = d.getSystemColor(SWT.COLOR_RED);
-        black = d.getSystemColor(SWT.COLOR_BLACK);
-        cyan = d.getSystemColor(SWT.COLOR_CYAN);
-        
-        //Añadimos a un array los diferentes colores:
-        colores = new ArrayList();
-        colores.add(black);
-        colores.add(cyan);
-        colores.add(green);
-        colores.add(red);
-        colores.add(magenta);
-        colores.add(yellow);
-        
-       // g.drawImage(imgBG, 0, 0);
- 
+		// g.drawImage(imgBG, 0, 0);
+
 	}
+
 	
 	public void paintTree(JavaMarioNode mn) {
-		System.out.println( mn.name);
-			ArrayList<JavaMarioNode> content = mn.children;
-			System.out.println( mn.compList);
-			for (SpriteComposite sc: mn.compList) {
-				
-				for (Sprite s: sc.spriteList) {
-					g.drawImage(img, s.x, s.y, scale, scale, s.posx*scale, base - (s.posy+1)*scale, scale, scale);
-				}
-			}
-			for (JavaMarioNode child: content){
-				paintTree(child);
-			}
-					
-	}
-	
-	
-	//Método que agrega rectangulos para el modo debug:
-	public void paintTreeDebug(JavaMarioNode mn) {
-		
-			
-		g.drawRectangle(mn.rectangle.x*scale, base - (mn.rectangle.y + mn.rectangle.height)*scale, 
-				mn.rectangle.width*scale, mn.rectangle.height*scale);
+		System.out.println(mn.name);
+		ArrayList<JavaMarioNode> content = mn.children;
+		System.out.println(mn.compList);
+		for (SpriteComposite sc : mn.compList) {
 
-			/*for (SpriteComposite sc: node.compList) {
-				//Tomamos el spritecomposite para obtener las coordenadas para la generación de rectangulos:
-				System.out.println(sc.spriteList);
-				System.out.println(sc);
-				
-				//g.drawRectangle(sc.posx*scale, base - (sc.posy+sc.leny)*scale, sc.lenx*scale, sc.leny*scale);
-			     
-				//g.setLineStyle(SWT.LINE_DOT);
-				/*g.setLineWidth(2);
-				g.setForeground((Color) colores.get(index));
-				index++;
-				if(index > colores.size()){
-					index = 1;
-				}*/
-			
-			for (JavaMarioNode child: mn.children){
-					paintTreeDebug(child);
-			}			
+			for (Sprite s : sc.spriteList) {
+				g.drawImage(img, s.x, s.y, scale, scale, s.posx * scale, base
+						- (s.posy + 1) * scale, scale, scale);
+			}
+		}
+		for (JavaMarioNode child : content) {
+			paintTree(child);
+		}
+
+	}
+
+	// Método que agrega rectangulos para el modo debug:
+	public void paintTreeDebug(JavaMarioNode mn) {
+
 		
+
+		g.setLineStyle(SWT.LINE_DOT);
+		g.setLineWidth(2);
+		g.drawRectangle(mn.rectangle.x * scale, base - (mn.rectangle.y + mn.rectangle.height) * scale,
+				mn.rectangle.width * scale, mn.rectangle.height * scale);
+		/*g.setForeground((Color) colors.get(index));
+		index++;
+		if (index > colors.size()) {
+			index = 1;
+		}*/
+
+		for (JavaMarioNode child : mn.children) {
+			paintTreeDebug(child);
+		}
+
 	}
 
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 
 import supermariocode.painter.JavaMarioNode;
 
@@ -46,7 +47,8 @@ class TreeVisitor extends ASTVisitor {
          name = name.substring(name.lastIndexOf('.')+1);
          
          JavaMarioNode current = (JavaMarioNode) stack.peek();
-         JavaMarioNode child =  new JavaMarioNode(name, node.getNodeType(), node.getStartPosition());
+         CompilationUnit cu = (CompilationUnit)node.getRoot();
+         JavaMarioNode child =  new JavaMarioNode(name, node.getNodeType(), cu.getLineNumber(node.getStartPosition()));
          current.children.add(child);       
                    
          stack.push(child);                           

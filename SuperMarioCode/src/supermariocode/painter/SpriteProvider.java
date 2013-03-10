@@ -32,7 +32,7 @@ public class SpriteProvider {
 
 	public SpriteComposite field(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.strangeYellowBox, 0, 1);
+		comp.addSprite(comp.strangeYellowBox, 0, 2);
 		return comp;
 	}
 
@@ -44,7 +44,7 @@ public class SpriteProvider {
 
 	public SpriteComposite local(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.questionYellowBox, 0, 1);
+		comp.addSprite(comp.questionYellowBox, 0, 2);
 		return comp;
 	}
 
@@ -71,9 +71,9 @@ public class SpriteProvider {
 
 	public SpriteComposite ifLeft(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.noneSprite, 0, 0);
-		comp.addSprite(comp.landMountainLeftSide, 1, 0);
-		comp.addSprite(comp.landMountainLeftSideUp, 1, 1);
+		//comp.addSprite(comp.noneSprite, 0, 0);
+		comp.addSprite(comp.landMountainLeftSide, 0, 0);
+		comp.addSprite(comp.landMountainLeftSideUp, 0, 1);
 		return comp;
 	}
 
@@ -106,7 +106,6 @@ public class SpriteProvider {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountainRightSide, 0, 0);
 		comp.addSprite(comp.landMountainRightSideUp, 0, 1);
-		comp.addSprite(comp.noneSprite, 1, 0);
 
 		return comp;
 	}
@@ -234,7 +233,7 @@ public class SpriteProvider {
 		case ASTNode.EXPRESSION_STATEMENT:
 
 			comp = expression(x, y);
-			boundingBox.x += comp.width; // lenx
+			boundingBox.width += comp.width; // lenx
 			if (comp.height > boundingBox.height) {
 				boundingBox.height = comp.height; // leny
 			}
@@ -251,6 +250,7 @@ public class SpriteProvider {
 			}
 			elem.addComposite(comp);
 			elem.rectangle = boundingBox;
+
 			System.out.println(boundingBox);
 			return boundingBox;
 
@@ -271,21 +271,21 @@ public class SpriteProvider {
 
 			JavaMarioNode elseNode = elem.children.get(2);
 
-			Rectangle elseBox = getSprites(elseNode, x, y);
+			
+			Rectangle elseBox = getSprites(elseNode, x+1, y);
 
 			JavaMarioNode thenNode = elem.children.get(1);
+			y += elseBox.height;
 			comp = ifLeft(x, y);
 			elem.addComposite(comp);
 
 			x += comp.width;
 			y += comp.height;
 
-			Rectangle thenBox = new Rectangle(0, 0, 0, 0); // the size of the
+			Rectangle thenBox = getSprites(thenNode, x, y); // the size of the
 															// corresponding
 			// part of stage
 			int soilLength = 0;
-
-			thenBox = getSprites(thenNode, x, y);
 			System.out.println("THEN:" + thenBox.x + "x" + thenBox.y);
 
 			y -= 2;
@@ -301,24 +301,17 @@ public class SpriteProvider {
 
 			// final terrain
 			comp = ifRight(x, y);
-			x += comp.width;
+			
 			elem.addComposite(comp);
 
 			// rellenamos el fondo del else
-			for (int posx = 0; posx < soilLength; posx++) {
-				for (int posy = 0; posy < elseBox.y - 2; posy++) {
-					comp = mountain(initx + 2 + posx, inity + posy);
+			for (int posx = 0; posx < soilLength+2; posx++) {
+				for (int posy = 0; posy < elseBox.height ; posy++) {
+					comp = mountain(initx + posx, inity + posy);
 					elem.addComposite(0, comp);
 				}
 			}
-			for (int posy = 0; posy < elseBox.y - 2; posy++) {
-				comp = leftMountain(initx + 1, inity + posy);
-				elem.addComposite(0, comp);
-			}
-			for (int posy = 0; posy < elseBox.y - 2; posy++) {
-				comp = rightMountain(initx + soilLength + 2, inity + posy);
-				elem.addComposite(0, comp);
-			}
+			
 
 			// ajustar
 			boundingBox.width += soilLength + 4;
