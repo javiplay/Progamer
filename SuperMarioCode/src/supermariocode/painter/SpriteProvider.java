@@ -244,18 +244,25 @@ public class SpriteProvider {
 			x += comp.width;
 			break;
 
+		
+			
 		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
-
-			comp = local(x, y);
-			boundingBox.width += comp.width; // lenx
-			if (comp.height > boundingBox.height) {
-				boundingBox.height = comp.height; // leny
+			
+			if (elem.children.get(0).getNodeType() == ASTNode.PRIMITIVE_TYPE){
+				for (int i = 1; i < elem.children.size() ; i++) {
+					comp = local(x, y);
+					elem.addComposite(comp);
+					y+=comp.height;
+					boundingBox.height += comp.height;
+					boundingBox.width = comp.width;
+				}
+				
 			}
-			elem.addComposite(comp);
 			elem.rectangle = boundingBox;
 
 			System.out.println(boundingBox);
 			return boundingBox;
+			
 
 		case ASTNode.RETURN_STATEMENT:
 			comp = ret(x, y);
