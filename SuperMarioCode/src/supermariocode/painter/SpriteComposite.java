@@ -22,10 +22,10 @@ package supermariocode.painter;
 import java.util.ArrayList;
 
 public class SpriteComposite {
-	int posx;
-	int posy;
-	int lenx;
-	int leny;
+	int x;
+	int y;
+	int width;
+	int height;
 	
 	
 	public Sprite noneSprite 				= new Sprite("noneSprite", 0, 0);
@@ -62,23 +62,23 @@ public class SpriteComposite {
 		
 	public SpriteComposite(int x, int y){
 		spriteList = new ArrayList();
-		posx = x;
-		posy = y;
+		this.x = x;
+		this.y = y;
 	};
 	
 	public boolean addSprite(Sprite s, int mwx, int mwy) {
-		s.setPos(posx + mwx, posy + mwy);
-		if (mwx+1>lenx)
-			lenx = mwx+1;
-		if (mwy+1>leny)
-			leny = mwy+1;
+		s.setPos(x + mwx, y + mwy);
+		if (mwx+1>width)
+			width = mwx+1;
+		if (mwy+1>height)
+			height = mwy+1;
 		spriteList.add(s);
 		return true;
 	};
 	
 	public String toString() {
 		
-		String result = new String("Comp("+posx+","+posy+","+lenx+","+leny+")");
+		String result = new String("Comp("+x+","+y+","+width+","+height+")");
 		
 		return result;	
 	}

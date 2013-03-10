@@ -328,13 +328,14 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										System.out.println(l);
 										
 										SpriteProvider sp = new SpriteProvider();
-										Point size = sp.getSprites(visitor.root, 0, 0);
+										Rectangle tempBox = sp.getSprites(visitor.root, 0, 0);
+										Rectangle drawingBox = new Rectangle(tempBox.x*16, tempBox.y*16, tempBox.width*16+32, tempBox.height*16+32);
 										System.out.println(visitor.root.toString());
-										System.out.println("X="+size.x+",Y="+size.y);
+										System.out.println("X="+drawingBox.x+",Y="+drawingBox.y);
 										
-										//pintar
-										Rectangle bounds = new Rectangle(0,0,size.x*16, size.y*16+32);										
-										image1 = new Image(myCanvas.getDisplay(), bounds);
+										//pintar	
+									
+										image1 = new Image(myCanvas.getDisplay(), drawingBox);
 										ImageData imgData = image1.getImageData();
 										int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
 										System.out.println("WHITE PIXELLLLL = "+ whitePixel);
@@ -343,7 +344,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										
 										
 										GC gc = new GC(image1);
-										MarioPainter painter = new MarioPainter(size.y*16+32, gc);
+										MarioPainter painter = new MarioPainter(drawingBox.height-16, gc);
 										myCanvas.setBackgroundImage(painter.imgBG);
 										painter.paintTree(visitor.root);	
 										

@@ -9,7 +9,7 @@
             id="SuperMarioCode">
       </category>
       <view
-            name="Mario View"
+            name="Maryo View"
             icon="icons/ani_smwmariobig.gif"
             category="SuperMarioCode"
             class="supermariocode.views.MarioCodeView"

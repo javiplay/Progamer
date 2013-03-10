@@ -27,7 +27,7 @@ public class JavaMarioNode {
 	int nodeType;
 	ArrayList<SpriteComposite> compList;
 	int lineNumber;
-	Rectangle rectangle;
+	public Rectangle rectangle;
 	public ArrayList<JavaMarioNode> children;
 	
 	public JavaMarioNode(String name, int nodeType, int _linenumber){
@@ -73,20 +73,20 @@ public class JavaMarioNode {
 		//rectangle.x = 
 		for(int i=0; i < compList.size(); i++){
 			//componente x inicial:
-			if( compList.get(i).posx < rectangle.x) {
-				rectangle.x = compList.get(i).posx;	
+			if( compList.get(i).x < rectangle.x) {
+				rectangle.x = compList.get(i).x;	
 			}	
 			//componente y inicial:
-			if( compList.get(i).posy < rectangle.y) {
-				rectangle.y = compList.get(i).posy;	
+			if( compList.get(i).y < rectangle.y) {
+				rectangle.y = compList.get(i).y;	
 			}
 			//componente x final:
-			if( (compList.get(i).posx + compList.get(i).lenx)  > rectangle.width) {
-				rectangle.width = compList.get(i).posx + compList.get(i).lenx;	
+			if( (compList.get(i).x + compList.get(i).width)  > rectangle.width) {
+				rectangle.width = compList.get(i).x + compList.get(i).width;	
 			}	
 			//componente y final:
-			if( (compList.get(i).posy + compList.get(i).leny)  > rectangle.height) {
-				rectangle.height = compList.get(i).posy + compList.get(i).leny;	
+			if( (compList.get(i).y + compList.get(i).height)  > rectangle.height) {
+				rectangle.height = compList.get(i).y + compList.get(i).height;	
 			}
 		}
 		

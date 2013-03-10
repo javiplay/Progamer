@@ -89,10 +89,11 @@ public class MarioPainter  {
 	}
 	
 	public void paintTree(JavaMarioNode mn) {
-		
+		System.out.println( mn.name);
 			ArrayList<JavaMarioNode> content = mn.children;
-			
+			System.out.println( mn.compList);
 			for (SpriteComposite sc: mn.compList) {
+				
 				for (Sprite s: sc.spriteList) {
 					g.drawImage(img, s.x, s.y, scale, scale, s.posx*scale, base - (s.posy+1)*scale, scale, scale);
 				}
@@ -105,21 +106,11 @@ public class MarioPainter  {
 	
 	
 	//Método que agrega rectangulos para el modo debug:
-	public void paintTreeDebug(JavaMarioNode l) {
-		for (int i = 0; i<l.children.size(); i+=2) {
-			JavaMarioNode node = l;
-			ArrayList<JavaMarioNode> content = l.children;
-
-			node.calculateBounds();
+	public void paintTreeDebug(JavaMarioNode mn) {
+		
 			
-			//System.out.println(node.rectangle.x+" "+ node.rectangle.y+" "+node.rectangle.width+" "+
-			//node.rectangle.height);
-
-			g.drawRectangle(node.rectangle.x*scale, base - (node.rectangle.height + node.rectangle.y)*scale, 
-					node.rectangle.width*scale, node.rectangle.height*scale);
-
-			//Variable que indica el índice del arraylist:
-			int index = 1;
+		g.drawRectangle(mn.rectangle.x*scale, base - (mn.rectangle.y + mn.rectangle.height)*scale, 
+				mn.rectangle.width*scale, mn.rectangle.height*scale);
 
 			/*for (SpriteComposite sc: node.compList) {
 				//Tomamos el spritecomposite para obtener las coordenadas para la generación de rectangulos:
@@ -136,15 +127,10 @@ public class MarioPainter  {
 					index = 1;
 				}*/
 			
-			for (JavaMarioNode child: content){
+			for (JavaMarioNode child: mn.children){
 					paintTreeDebug(child);
-			}
-			
-		}	
+			}			
 		
 	}
-	
-	
-
 
 }
