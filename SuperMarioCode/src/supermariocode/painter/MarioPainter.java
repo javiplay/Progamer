@@ -50,7 +50,7 @@ public class MarioPainter {
 	Color red;
 	Color black;
 	Color cyan;
-	Color white;
+	Color gray;
 
 	ArrayList colors;
 	int index = 0;
@@ -73,7 +73,7 @@ public class MarioPainter {
 		red = d.getSystemColor(SWT.COLOR_RED);
 		black = d.getSystemColor(SWT.COLOR_BLACK);
 		cyan = d.getSystemColor(SWT.COLOR_CYAN);
-		white = d.getSystemColor(SWT.COLOR_WHITE);
+		gray = d.getSystemColor(SWT.COLOR_GRAY);
 		
 		// Añadimos a un array los diferentes colores:
 		colors = new ArrayList();
@@ -83,7 +83,7 @@ public class MarioPainter {
 		colors.add(red);
 		colors.add(magenta);
 		colors.add(yellow);
-		colors.add(white);
+		colors.add(gray);
 		// g.drawImage(imgBG, 0, 0);
 
 	}

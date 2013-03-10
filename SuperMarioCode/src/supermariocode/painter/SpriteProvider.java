@@ -241,8 +241,10 @@ public class SpriteProvider {
 				boundingBox.height = comp.height; // leny
 			}
 			elem.addComposite(comp);
-			x += comp.width;
-			break;
+			elem.rectangle = boundingBox;
+
+			System.out.println(boundingBox);
+			return boundingBox;
 
 		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
 
@@ -259,13 +261,14 @@ public class SpriteProvider {
 
 		case ASTNode.RETURN_STATEMENT:
 			comp = ret(x, y);
-			boundingBox.x += comp.width; // lenx
-			if (comp.y + comp.height > boundingBox.y) {
-				boundingBox.y = comp.y + comp.height; // leny
+			boundingBox.width += comp.width; // lenx
+			if (comp.height > boundingBox.height) {
+				boundingBox.height = comp.height; // leny
 			}
 			elem.addComposite(comp);
-			x += comp.width;
-			break;
+			elem.rectangle = boundingBox;
+			System.out.println(boundingBox);
+			return boundingBox;
 
 		case ASTNode.IF_STATEMENT:
 
@@ -286,13 +289,12 @@ public class SpriteProvider {
 
 			x += comp.width;
 			y += comp.height;
-
 			Rectangle thenBox = getSprites(thenNode, x, y); // the size of the
 															// corresponding
 			// part of stage
 			int soilLength = 0;
-			System.out.println("THEN:" + thenBox.x + "x" + thenBox.y);
-
+			System.out.println("THEN:" + thenBox.x + "x" + thenBox.y + 
+					" Width: "+ thenBox.width + " Height: " + thenBox.height);
 			y -= 2;
 			iterx = x;
 			soilLength = (thenBox.width > elseBox.width) ? thenBox.width : elseBox.width;
@@ -306,9 +308,8 @@ public class SpriteProvider {
 
 			// final terrain
 			comp = ifRight(x, y);
-			
 			elem.addComposite(comp);
-
+			
 			// rellenamos el fondo del else
 			for (int posx = 0; posx < soilLength+2; posx++) {
 				for (int posy = 0; posy < elseBox.height ; posy++) {
@@ -317,17 +318,15 @@ public class SpriteProvider {
 				}
 			}
 			
-
 			// ajustar
-			boundingBox.width += soilLength + 4;
-			if (y + thenBox.height > boundingBox.height) {
-				boundingBox.height = y + thenBox.height; // leny
+			boundingBox.width += soilLength + 2;
+			if (thenBox.y - inity + thenBox.height > boundingBox.height) {
+				boundingBox.height = thenBox.y - inity + thenBox.height; // leny
 			}
-			
+			elem.rectangle = boundingBox;
 			return boundingBox;
 
 		case ASTNode.FOR_STATEMENT:
-
 			// list = FindBlock(list);
 			// initial constructor/method terrain
 			comp = forTube(x, y);
@@ -365,9 +364,7 @@ public class SpriteProvider {
 			}
 			break;
 		default:
-
 			return getSprites(list.get(0), x, y);
-
 		}
 
 		return boundingBox;
