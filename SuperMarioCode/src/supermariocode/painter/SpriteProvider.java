@@ -71,9 +71,8 @@ public class SpriteProvider {
 
 	public SpriteComposite ifLeft(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.noneSprite, 0, 0);
-		comp.addSprite(comp.landMountainLeftSide, 1, 0);
-		comp.addSprite(comp.landMountainLeftSideUp, 1, 1);
+		comp.addSprite(comp.landMountainLeftSide, 0, 0);
+		comp.addSprite(comp.landMountainLeftSideUp, 0, 1);
 		return comp;
 	}
 
@@ -120,18 +119,18 @@ public class SpriteProvider {
 
 	public SpriteComposite forTube(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.noneSprite, 0, 0);
-		comp.addSprite(comp.tubeGreenLeftSideDown, 1, 0);
-		comp.addSprite(comp.tubeGreenLeftSideUp, 1, 1);
-		comp.addSprite(comp.tubeGreenRihtSideDown, 2, 0);
-		comp.addSprite(comp.tubeGreenRightSideUp, 2, 1);
-		comp.addSprite(comp.noneSprite, 3, 0);
+		//comp.addSprite(comp.noneSprite, 0, 0);
+		comp.addSprite(comp.tubeGreenLeftSideDown, 0, 0);
+		comp.addSprite(comp.tubeGreenLeftSideUp, 0, 1);
+		comp.addSprite(comp.tubeGreenRihtSideDown, 1, 0);
+		comp.addSprite(comp.tubeGreenRightSideUp, 1, 1);
+		//comp.addSprite(comp.noneSprite, 3, 0);
 
 		return comp;
 	}
 
 	public Rectangle getSprites(JavaMarioNode elem, int x, int y) {
-		System.out.println(elem.name + "  Posición: " + x + " " + y);
+		System.out.println(elem.name + "  Posiciï¿½n: " + x + " " + y);
 		// Devolver el tamaï¿½o total de la composiciï¿½n
 		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
 		ArrayList<JavaMarioNode> list = elem.children;
@@ -330,42 +329,52 @@ public class SpriteProvider {
 
 		case ASTNode.FOR_STATEMENT:
 
-			// list = FindBlock(list);
-			// initial constructor/method terrain
+			JavaMarioNode forBlock = null;
+
+			// coger la lista de block
+			for (JavaMarioNode child : list) {
+				if (child.getNodeType() == ASTNode.BLOCK) {
+					forBlock = child;
+					break;
+				}
+			}
+
 			comp = forTube(x, y);
-			int firsttubesizex = comp.width;
 			elem.addComposite(comp);
+
 			x += comp.width;
 			y += comp.height;
-			Rectangle forLength = new Rectangle(0, 0, 0, 0);
-			forLength = getSprites(list.get(0), x, y);
-			System.out.println("FOR:" + forLength.x + "x" + forLength.y);
 
-			x += forLength.x;
-			y -= comp.height;
+			Rectangle forBox = getSprites(forBlock, x, y);
+			System.out.println("METHOD:" + forBox.width + "x"
+					+ forBox.height);
+
+			y -= 2;
+			iterx = x;
+			while (iterx < x + forBox.width) {
+				comp = constructorCenter(iterx, y);
+				elem.addComposite(comp);
+				iterx++;
+			}
+			x = iterx;
+
 			comp = forTube(x, y);
 			elem.addComposite(comp);
 
-			// Start painting floor inside for loop
-			x -= forLength.x;
-			int soilx = x - 1; // pointer to start painting the floor
-			// comp = constructorLeft(x-1, y);
-			// elem.addComposite(comp);
-			while (soilx <= x + forLength.x) {
-				comp = constructorCenter(soilx, y);
-				elem.addComposite(comp);
-				soilx++;
+			// establecemos el tamaï¿½o final de esta composiciï¿½n de sprites
+			boundingBox.width += forBox.width + 2 * comp.width + 2; // el
+																		// contenido
+																		// horizontal
+																		// del
+			// metodo mas el cuadro de
+			// inicio y el de final
+			if (comp.height + forBox.height > boundingBox.height) {
+				boundingBox.height = comp.height + forBox.height; // leny
 			}
-			// x = soilx;
 
-			x += soilx + 4; // incremento para poder seguir pintando tras el
-							// segundo tubo, 4 es el ancho del tubo
-
-			boundingBox.x += forLength.x + 8;
-			if (y + forLength.y > boundingBox.y) {
-				boundingBox.y = y + forLength.y; // leny
-			}
-			break;
+			System.out.println(boundingBox);
+			elem.rectangle = boundingBox;
+			return boundingBox;
 		default:
 
 			return getSprites(list.get(0), x, y);

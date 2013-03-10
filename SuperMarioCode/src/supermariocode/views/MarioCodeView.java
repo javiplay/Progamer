@@ -337,7 +337,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 									
 										image1 = new Image(myCanvas.getDisplay(), drawingBox);
 										ImageData imgData = image1.getImageData();
-										int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
+										int whitePixel = imgData.palette.getPixel(new RGB(0,0,0));
 										System.out.println("WHITE PIXELLLLL = "+ whitePixel);
 										imgData.transparentPixel = whitePixel;
 										image1 = new Image(myCanvas.getDisplay(), imgData);
@@ -348,7 +348,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										myCanvas.setBackgroundImage(painter.imgBG);
 										painter.paintTree(visitor.root);	
 										
-										//Método nuevo:
+										//Mï¿½todo nuevo:
 										painter.paintTreeDebug(visitor.root);
 										
 										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
