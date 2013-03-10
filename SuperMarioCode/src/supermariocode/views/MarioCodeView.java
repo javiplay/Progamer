@@ -338,7 +338,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 									
 										image1 = new Image(myCanvas.getDisplay(), drawingBox);
 										ImageData imgData = image1.getImageData();
-										int whitePixel = imgData.palette.getPixel(new RGB(0,0,0));
+										int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
 										System.out.println("WHITE PIXELLLLL = "+ whitePixel);
 										imgData.transparentPixel = whitePixel;
 										image1 = new Image(myCanvas.getDisplay(), imgData);

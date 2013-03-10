@@ -234,7 +234,7 @@ public class SpriteProvider {
 			return boundingBox;
 
 		case ASTNode.EXPRESSION_STATEMENT:
-
+			
 			comp = expression(x, y);
 			boundingBox.width += comp.width; // lenx
 			if (comp.height > boundingBox.height) {
@@ -242,9 +242,8 @@ public class SpriteProvider {
 			}
 			elem.addComposite(comp);
 			x += comp.width;
+			
 			break;
-
-		
 			
 		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
 			
@@ -256,8 +255,7 @@ public class SpriteProvider {
 					boundingBox.height += comp.height;
 					boundingBox.width = comp.width;
 				}
-				
-			}
+			} 
 			elem.rectangle = boundingBox;
 
 			System.out.println(boundingBox);
