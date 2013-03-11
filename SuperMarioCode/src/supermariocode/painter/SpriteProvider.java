@@ -1,6 +1,6 @@
 /* 
   Code Reimagined, Class for painting the AST
-    Copyright (C) 2010-2013 José Javier Asensio Montiel
+    Copyright (C) 2010-2013 JosÃ© Javier Asensio Montiel
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ public class SpriteProvider {
 
 	public SpriteComposite ifLeft(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		//comp.addSprite(comp.noneSprite, 0, 0);
+		// comp.addSprite(comp.noneSprite, 0, 0);
 		comp.addSprite(comp.landMountainLeftSide, 0, 0);
 		comp.addSprite(comp.landMountainLeftSideUp, 0, 1);
 		return comp;
@@ -119,23 +119,23 @@ public class SpriteProvider {
 
 	public SpriteComposite forTube(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
-		comp.addSprite(comp.noneSprite, 0, 0);
-		comp.addSprite(comp.tubeGreenLeftSideDown, 1, 0);
-		comp.addSprite(comp.tubeGreenLeftSideUp, 1, 1);
-		comp.addSprite(comp.tubeGreenRihtSideDown, 2, 0);
-		comp.addSprite(comp.tubeGreenRightSideUp, 2, 1);
-		comp.addSprite(comp.noneSprite, 3, 0);
+		// comp.addSprite(comp.noneSprite, 0, 0);
+		comp.addSprite(comp.tubeGreenLeftSideDown, 0, 0);
+		comp.addSprite(comp.tubeGreenLeftSideUp, 0, 1);
+		comp.addSprite(comp.tubeGreenRihtSideDown, 1, 0);
+		comp.addSprite(comp.tubeGreenRightSideUp, 1, 1);
+		// comp.addSprite(comp.noneSprite, 3, 0);
 
 		return comp;
 	}
 
 	public Rectangle getSprites(JavaMarioNode elem, int x, int y) {
-		
-		// Devolver el tama�o total de la composici�n
+
+		// Devolver el tamaï¿½o total de la composiciï¿½n
 		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
-		
-		if(elem == null){
-			return boundingBox;	
+
+		if (elem == null) {
+			return boundingBox;
 		}
 		ArrayList<JavaMarioNode> list = elem.children;
 		SpriteComposite comp;
@@ -201,7 +201,7 @@ public class SpriteProvider {
 			comp = constructorRight(x, y);
 			elem.addComposite(comp);
 
-			// establecemos el tama�o final de esta composici�n de sprites
+			// establecemos el tamaï¿½o final de esta composiciï¿½n de sprites
 			boundingBox.width += methodBox.width + 2 * comp.width + 2; // el
 																		// contenido
 																		// horizontal
@@ -233,14 +233,12 @@ public class SpriteProvider {
 			System.out.println(boundingBox);
 			return boundingBox;
 
-		
 		case ASTNode.SWITCH_STATEMENT:
 
 			elem.rectangle = boundingBox;
 			System.out.println("SWITCH_STATEMENT " + boundingBox);
 			return boundingBox;
-		
-			
+
 		case ASTNode.EXPRESSION_STATEMENT:
 
 			comp = expression(x, y);
@@ -256,12 +254,15 @@ public class SpriteProvider {
 
 		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
 
+			if (elem.children.get(0).getNodeType() == ASTNode.PRIMITIVE_TYPE){
+			for (int i = 1; i < elem.children.size() ; i++) {
 			comp = local(x, y);
-			boundingBox.width += comp.width; // lenx
-			if (comp.height > boundingBox.height) {
-				boundingBox.height = comp.height; // leny
-			}
 			elem.addComposite(comp);
+			y+=comp.height;
+			boundingBox.height += comp.height;
+			boundingBox.width = comp.width;
+			}
+			}
 			elem.rectangle = boundingBox;
 
 			System.out.println(boundingBox);
@@ -283,12 +284,12 @@ public class SpriteProvider {
 			int initx = x;
 			int inity = y;
 			JavaMarioNode elseNode = null;
-			
-			if(elem.children.size() == 3){
+
+			if (elem.children.size() == 3) {
 				elseNode = elem.children.get(2);
 			}
-			
-			Rectangle elseBox = getSprites(elseNode, x+1, y);
+
+			Rectangle elseBox = getSprites(elseNode, x + 1, y);
 
 			JavaMarioNode thenNode = elem.children.get(1);
 			y += elseBox.height;
@@ -301,11 +302,13 @@ public class SpriteProvider {
 															// corresponding
 			// part of stage
 			int soilLength = 0;
-			System.out.println("THEN:" + thenBox.x + "x" + thenBox.y + 
-					" Width: "+ thenBox.width + " Height: " + thenBox.height);
+			System.out
+					.println("THEN:" + thenBox.x + "x" + thenBox.y + " Width: "
+							+ thenBox.width + " Height: " + thenBox.height);
 			y -= 2;
 			iterx = x;
-			soilLength = (thenBox.width > elseBox.width) ? thenBox.width : elseBox.width;
+			soilLength = (thenBox.width > elseBox.width) ? thenBox.width
+					: elseBox.width;
 
 			while (iterx < x + soilLength) {
 				comp = ifCenter(iterx, y);
@@ -317,15 +320,15 @@ public class SpriteProvider {
 			// final terrain
 			comp = ifRight(x, y);
 			elem.addComposite(comp);
-			
+
 			// rellenamos el fondo del else
-			for (int posx = 0; posx < soilLength+2; posx++) {
-				for (int posy = 0; posy < elseBox.height ; posy++) {
+			for (int posx = 0; posx < soilLength + 2; posx++) {
+				for (int posy = 0; posy < elseBox.height; posy++) {
 					comp = mountain(initx + posx, inity + posy);
 					elem.addComposite(0, comp);
 				}
 			}
-			
+
 			// ajustar
 			boundingBox.width += soilLength + 2;
 			if (thenBox.y - inity + thenBox.height > boundingBox.height) {
@@ -335,45 +338,57 @@ public class SpriteProvider {
 			return boundingBox;
 
 		case ASTNode.FOR_STATEMENT:
+
+			JavaMarioNode forBlock = null;
+
+			// coger la lista de block
+			for (JavaMarioNode child : list) {
+				if (child.getNodeType() == ASTNode.BLOCK) {
+					forBlock = child;
+					break;
+				}
+			}
+
 			// list = FindBlock(list);
 			// initial constructor/method terrain
 			comp = forTube(x, y);
-			int firsttubesizex = comp.width;
 			elem.addComposite(comp);
+
 			x += comp.width;
 			y += comp.height;
-			Rectangle forLength = new Rectangle(0, 0, 0, 0);
-			forLength = getSprites(list.get(0), x, y);
-			System.out.println("FOR:" + forLength.x + "x" + forLength.y);
 
-			x += forLength.x;
-			y -= comp.height;
+			Rectangle forBox = getSprites(forBlock, x, y);
+			System.out.println("METHOD:" + forBox.width + "x" + forBox.height);
+
+			y -= 2;
+			iterx = x;
+			while (iterx < x + forBox.width) {
+				comp = constructorCenter(iterx, y);
+				elem.addComposite(comp);
+				iterx++;
+			}
+			x = iterx;
+
 			comp = forTube(x, y);
 			elem.addComposite(comp);
 
-			// Start painting floor inside for loop
-			x -= forLength.x;
-			int soilx = x - 1; // pointer to start painting the floor
-			// comp = constructorLeft(x-1, y);
-			// elem.addComposite(comp);
-			while (soilx <= x + forLength.x) {
-				comp = constructorCenter(soilx, y);
-				elem.addComposite(comp);
-				soilx++;
+			// establecemos el tama�o final de esta composici�n de sprites
+			boundingBox.width += forBox.width + 2 * comp.width + 2; // el
+			// contenido
+			// horizontal
+			// del
+			// metodo mas el cuadro de
+			// inicio y el de final
+			if (comp.height + forBox.height > boundingBox.height) {
+				boundingBox.height = comp.height + forBox.height; // leny
 			}
-			// x = soilx;
 
-			x += soilx + 4; // incremento para poder seguir pintando tras el
-							// segundo tubo, 4 es el ancho del tubo
+			System.out.println(boundingBox);
+			elem.rectangle = boundingBox;
+			return boundingBox;
 
-			boundingBox.x += forLength.x + 8;
-			if (y + forLength.y > boundingBox.y) {
-				boundingBox.y = y + forLength.y; // leny
-			}
-			break;
-			
 		default:
-				return getSprites(list.get(0), x, y);
+			return getSprites(list.get(0), x, y);
 		}
 
 		return boundingBox;
@@ -408,8 +423,8 @@ public class SpriteProvider {
 
 		// si no tiene parte else la lista tiene 4 elementos (expresion,
 		// listaExpresion, then, listaThen)
-		// La parte else siempre esta en la posici�n 4, si es un block se
-		// devuelve el contenido del block (la lista en la posici�n 5) si no,
+		// La parte else siempre esta en la posiciï¿½n 4, si es un block se
+		// devuelve el contenido del block (la lista en la posiciï¿½n 5) si no,
 		// se crea una lista y se mete el 4 y el 5.
 
 		if (list.size() == 4) {
