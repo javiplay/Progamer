@@ -112,7 +112,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 
 	private Action action1;
 	private Action action2;
-	
+	private Action actionDebug;
 	
 	public static Canvas myCanvas;
 	Image image1, image2;
@@ -143,6 +143,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	 * This is a callback that will allow us
 	 * to create the viewer and initialize it.
 	 */
+	boolean debugMode = true;
+	
 	public void createPartControl(Composite parent) {
 		
 	    control = parent;	   
@@ -150,6 +152,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 
 		image2 = new Image(MarioCodeView.myCanvas.getDisplay(),
     			MarioCodeView.class.getResourceAsStream("background1.jpg"));
+
 
         //myCanvas.setBackgroundImage(image2);
         //labelState = new Label(parent, SWT.WRAP);
@@ -268,11 +271,14 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 		manager.add(action1);
 		manager.add(new Separator());
 		manager.add(action2);
+		manager.add(actionDebug);
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(action1);
 		manager.add(action2);
+		actionDebug.setChecked(true);
+		manager.add(actionDebug);
 	}
 
 	/**
@@ -348,8 +354,10 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										myCanvas.setBackgroundImage(painter.imgBG);
 										painter.paintTree(visitor.root);	
 										
-										//Método nuevo:
-										painter.paintTreeDebug(visitor.root);
+										if(debugMode == true){
+											//Método nuevo:
+											painter.paintTreeDebug(visitor.root);
+										}
 										
 										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
 										gc.dispose();
@@ -466,6 +474,22 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 		action2.setToolTipText("Action 2 tooltip");
 		action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
 				getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		
+		actionDebug = new Action() {
+			public void run() {
+				if(debugMode == false){
+					debugMode = true;
+				}else{
+					debugMode = false;
+				}
+				action1.run();
+			}
+		};
+		actionDebug.setText("Debug mode");
+		actionDebug.setToolTipText("Debug mode tooltip");
+		actionDebug.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+				getImageDescriptor(ISharedImages.IMG_OBJS_WARN_TSK));
+		
 		
 	}
 

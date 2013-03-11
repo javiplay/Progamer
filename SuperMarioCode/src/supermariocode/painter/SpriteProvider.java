@@ -233,6 +233,14 @@ public class SpriteProvider {
 			System.out.println(boundingBox);
 			return boundingBox;
 
+		
+		case ASTNode.SWITCH_STATEMENT:
+
+			elem.rectangle = boundingBox;
+			System.out.println("SWITCH_STATEMENT " + boundingBox);
+			return boundingBox;
+		
+			
 		case ASTNode.EXPRESSION_STATEMENT:
 
 			comp = expression(x, y);
@@ -363,8 +371,9 @@ public class SpriteProvider {
 				boundingBox.y = y + forLength.y; // leny
 			}
 			break;
+			
 		default:
-			return getSprites(list.get(0), x, y);
+				return getSprites(list.get(0), x, y);
 		}
 
 		return boundingBox;
