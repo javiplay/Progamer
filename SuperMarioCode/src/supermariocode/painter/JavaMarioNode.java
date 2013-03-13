@@ -20,6 +20,7 @@ package supermariocode.painter;
 
 import java.util.ArrayList;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.graphics.Rectangle;
 
 public class JavaMarioNode {
@@ -59,19 +60,19 @@ public class JavaMarioNode {
 		
 	}
 	public String toString(){
-		//return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
-		/*String str = name + " [";
+		return name;
+	}
+	
+	public String toLongString(){
+		
+		String str = name + " [";
 		for(JavaMarioNode mn: this.children) {
 			str+= " " + mn.toString();
 		}
 		str += " ]";
-		return str ;*/
-		return name;
+		return str ;		
 	}
-	
-	//Devolvemos las posiciones del SpriteComposite:
 	void calculateBounds(){
-		//rectangle.x = 
 		for(int i=0; i < compList.size(); i++){
 			//componente x inicial:
 			if( compList.get(i).x < rectangle.x) {
@@ -90,8 +91,16 @@ public class JavaMarioNode {
 				rectangle.height = compList.get(i).y + compList.get(i).height;	
 			}
 		}
+	}
+	
+	public JavaMarioNode getFirstChildOfType(int type) {
 		
-
+		for (JavaMarioNode child : children) {
+			if (child.getNodeType() == type) {
+				return child;
+			}
+		}
+		return null;
 	}
 	
 }

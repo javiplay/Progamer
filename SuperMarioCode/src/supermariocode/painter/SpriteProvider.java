@@ -30,46 +30,46 @@ public class SpriteProvider {
 
 	}
 
-	public SpriteComposite field(int x, int y) {
+	SpriteComposite field(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.strangeYellowBox, 0, 2);
 		return comp;
 	}
 
-	public SpriteComposite expression(int x, int y) {
+	SpriteComposite expression(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.normalYellowBox, 0, 2);
 		return comp;
 	}
 
-	public SpriteComposite local(int x, int y) {
+	SpriteComposite local(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.questionYellowBox, 0, 2);
 		return comp;
 	}
 
-	public SpriteComposite constructorLeft(int x, int y) {
+	SpriteComposite constructorLeft(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landTerrainLeftSide, 0, 0);
 		comp.addSprite(comp.landTerrainLeftSideUp, 0, 1);
 		return comp;
 	}
 
-	public SpriteComposite constructorCenter(int x, int y) {
+	SpriteComposite constructorCenter(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landTerrain, 0, 0);
 		comp.addSprite(comp.landTerrainSoil, 0, 1);
 		return comp;
 	}
 
-	public SpriteComposite constructorRight(int x, int y) {
+	SpriteComposite constructorRight(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landTerrainRightSide, 0, 0);
 		comp.addSprite(comp.landTerrainRightSideUp, 0, 1);
 		return comp;
 	}
 
-	public SpriteComposite ifLeft(int x, int y) {
+	SpriteComposite ifLeft(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		//comp.addSprite(comp.noneSprite, 0, 0);
 		comp.addSprite(comp.landMountainLeftSide, 0, 0);
@@ -77,32 +77,32 @@ public class SpriteProvider {
 		return comp;
 	}
 
-	public SpriteComposite ifCenter(int x, int y) {
+	SpriteComposite ifCenter(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountain, 0, 0);
 		comp.addSprite(comp.landMountainSoil, 0, 1);
 		return comp;
 	}
 
-	public SpriteComposite mountain(int x, int y) {
+	SpriteComposite mountain(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountain, 0, 0);
 		return comp;
 	}
 
-	public SpriteComposite leftMountain(int x, int y) {
+	SpriteComposite leftMountain(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountainLeftSide, 0, 0);
 		return comp;
 	}
 
-	public SpriteComposite rightMountain(int x, int y) {
+	SpriteComposite rightMountain(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountainRightSide, 0, 0);
 		return comp;
 	}
 
-	public SpriteComposite ifRight(int x, int y) {
+	SpriteComposite ifRight(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.landMountainRightSide, 0, 0);
 		comp.addSprite(comp.landMountainRightSideUp, 0, 1);
@@ -110,14 +110,14 @@ public class SpriteProvider {
 		return comp;
 	}
 
-	public SpriteComposite ret(int x, int y) {
+	SpriteComposite ret(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		comp.addSprite(comp.doorBrownDownSide, 1, 0);
 		comp.addSprite(comp.doorBrownUpSide, 1, 1);
 		return comp;
 	}
 
-	public SpriteComposite forTube(int x, int y) {
+	SpriteComposite forTube(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		//comp.addSprite(comp.noneSprite, 0, 0);
 		comp.addSprite(comp.tubeGreenLeftSideDown, 0, 0);
@@ -128,313 +128,299 @@ public class SpriteProvider {
 
 		return comp;
 	}
+	
+	
+	Rectangle getTypeDeclarationSprites(JavaMarioNode elem, int x, int y) {
+		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		for (JavaMarioNode child : elem.children) {
+			if (child.getNodeType() == ASTNode.METHOD_DECLARATION) {
+				Rectangle r = getSprites(child, x, y);
+				boundingBox = getUnionBox(boundingBox, r);
+				x += r.width;
+			}
+		}
+		return boundingBox;				
+	}
+	
+	
+	
+	
+	Rectangle getMethodDeclarationSprites(JavaMarioNode elem, int x, int y){
+		
+		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		JavaMarioNode block = elem.getFirstChildOfType(ASTNode.BLOCK);
 
-	public Rectangle getSprites(JavaMarioNode elem, int x, int y) {
-		System.out.println(elem.name + "  Posici�n: " + x + " " + y);
-		// Devolver el tama�o total de la composici�n
+		SpriteComposite comp = constructorLeft(x, y);
+		elem.addComposite(comp);
+
+		x += comp.width;
+		y += comp.height;
+
+		Rectangle methodBox = getSprites(block, x, y);
+
+		y -= 2;
+		int iterx = 0;
+		while (iterx < methodBox.width) {
+			comp = constructorCenter(x + iterx, y);
+			elem.addComposite(comp);
+			iterx++;
+		}
+		x += iterx;
+
+		comp = constructorRight(x, y);
+		elem.addComposite(comp);
+
+
+		boundingBox.width = methodBox.width + 2*comp.width + 2; // for the last 2 spaces
+		boundingBox = getUnionBox(boundingBox, methodBox);
+		elem.rectangle = boundingBox;
+		return boundingBox;
+	}
+	
+	
+	Rectangle getUnionBox(Rectangle r1, Rectangle r2) {
+		
+		Rectangle unionBox = new Rectangle(0, 0, 0, 0);
+		unionBox.x = min(r1.x, r2.x);
+		unionBox.y = min(r1.y, r2.y);
+		unionBox.width = max(r1.x+r1.width-unionBox.x, r2.x+r2.width-unionBox.x);
+		unionBox.height = max(r1.y+r1.height-unionBox.y, r2.y+r2.height-unionBox.y);
+		return unionBox;
+	}
+	
+	private int min(int x, int x2) {
+		if (x<x2) return x;
+		return x2;
+	}
+	private int max(int x, int x2) {
+		if (x>x2) return x;
+		return x2;
+	}
+
+
+	Rectangle getBlockSprites(JavaMarioNode elem, int x, int y) {
+		
+		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		Rectangle childBox = null;
+		
+		for (JavaMarioNode child : elem.children) {
+			childBox = getSprites(child, x, y);
+			boundingBox = getUnionBox(boundingBox, childBox);
+			x += childBox.width;						
+		}
+		elem.rectangle = boundingBox;
+		
+		return boundingBox;
+	}
+	
+	
+	
+	Rectangle getExpressionSprites(JavaMarioNode elem, int x, int y) {
+
+		SpriteComposite comp = expression(x, y);
+		elem.rectangle = getUnionBox(new Rectangle(x, y, 0, 0),comp.box);
+		elem.addComposite(comp);
+		
+		return elem.rectangle;
+	}
+
+	Rectangle getVariableDeclarationSprites(JavaMarioNode elem, int x, int y) {
+		
 		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
 		
-		if(elem == null){
-			return boundingBox;	
+		if (elem.children.get(0).getNodeType() == ASTNode.PRIMITIVE_TYPE){
+			for (int i = 1; i < elem.children.size() ; i++) {
+				SpriteComposite comp = local(x, y);
+				elem.addComposite(comp);
+				y+=comp.height;
+				boundingBox = getUnionBox(boundingBox, comp.box);
+			}
+		} 
+		elem.rectangle = boundingBox;		
+		return boundingBox;		
+	}
+	
+	Rectangle getReturnSprites(JavaMarioNode elem, int x, int y) {
+		
+		SpriteComposite comp = ret(x, y);
+		elem.addComposite(comp);
+		elem.rectangle = getUnionBox(new Rectangle(x, y, 0, 0),comp.box);
+		return elem.rectangle;
+	}
+	
+	Rectangle getIfStatementSprites(JavaMarioNode elem, int x, int y) {
+		int initx = x;
+		int inity = y;
+		JavaMarioNode elseNode = null;
+		JavaMarioNode thenNode = null;
+		
+		if(elem.children.size() == 3){
+			elseNode = elem.children.get(2);
 		}
-		ArrayList<JavaMarioNode> list = elem.children;
-		SpriteComposite comp;
+		
+		if(elem.children.size() >= 2){
+			thenNode = elem.children.get(1);
+		}
+		
+		Rectangle elseBox = getSprites(elseNode, x+1, y);
+		
+		y += elseBox.height;
+		
+		SpriteComposite comp = ifLeft(x, y);
+		elem.addComposite(comp);
+
+		x += comp.width;
+		y += comp.height;
+		
+		Rectangle thenBox = getSprites(thenNode, x, y); 
+		
+		
+		y -= 2;
+		int totalWidth = (thenBox.width > elseBox.width) ? thenBox.width : elseBox.width;
+		int iterx = 0;
+		
+		while (iterx < totalWidth) {
+			comp = ifCenter(x + iterx, y);
+			elem.addComposite(comp);
+			iterx++;
+		}
+		x += iterx;
+
+		comp = ifRight(x, y);
+		elem.addComposite(comp);
+		
+		for (int posx = 0; posx < totalWidth+2; posx++) {
+			for (int posy = 0; posy < elseBox.height ; posy++) {
+				comp = mountain(initx + posx, inity + posy);
+				elem.addComposite(0, comp);
+			}
+		}
+		
+
+		elem.rectangle = getUnionBox(new Rectangle(initx, inity, 0, 0), new Rectangle(initx, inity, totalWidth + 2, thenBox.y + thenBox.height-inity));
+		
+		return elem.rectangle;
+	}
+	
+	Rectangle getForStatementSprites(JavaMarioNode elem, int x, int y) {
+
+		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		JavaMarioNode block = elem.getFirstChildOfType(ASTNode.BLOCK);
+		SpriteComposite comp = forTube(x, y);		
+		elem.addComposite(comp);
+		x += comp.width;
+		y += comp.height;
+		Rectangle blockBox = getSprites(block, x, y);
+		boundingBox = getUnionBox(boundingBox, blockBox);
+		y -= 2;
+		int iterx = 0;
+		while (iterx < blockBox.width) {
+			comp = constructorCenter(x+iterx, y);
+			elem.addComposite(comp);
+			iterx++;
+		}
+		x += iterx;
+		comp = forTube(x, y);
+		elem.addComposite(comp);
+		boundingBox = getUnionBox(boundingBox, comp.box);
+	
+		elem.rectangle = boundingBox;
+		return boundingBox;
+	}
+	
+	public Rectangle getSprites(JavaMarioNode elem, int x, int y) {
+
+		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		if(elem == null) {
+			return boundingBox;
+		}
 
 		switch (elem.getNodeType()) {
 
-		case ASTNode.TYPE_DECLARATION:
-			for (JavaMarioNode child : elem.children) {
-				if (child.getNodeType() == ASTNode.METHOD_DECLARATION) {
-					Rectangle r = getSprites(child, x, y);
-					x += r.width;
-					boundingBox.width += r.width;
-					if (r.height > boundingBox.height) {
-						boundingBox.height = r.height;
-					}
-				}
-			}
-
-			return boundingBox;
+		case ASTNode.TYPE_DECLARATION:			
+			return getTypeDeclarationSprites(elem, x, y);
 
 		case ASTNode.FIELD_DECLARATION:
-			comp = field(x, y);
-			boundingBox.x += comp.width; // lenx
-			if (comp.height > boundingBox.y) {
-				boundingBox.y = comp.height; // leny
-			}
-			elem.addComposite(comp);
-			x += comp.width;
-			break;
+			return getTypeDeclarationSprites(elem, x, y);
 
-		case ASTNode.METHOD_DECLARATION:
-			JavaMarioNode methodBlock = null;
-
-			// coger la lista de block
-			for (JavaMarioNode child : list) {
-				if (child.getNodeType() == ASTNode.BLOCK) {
-					methodBlock = child;
-					break;
-				}
-			}
-
-			comp = constructorLeft(x, y);
-			elem.addComposite(comp);
-
-			x += comp.width;
-			y += comp.height;
-
-			Rectangle methodBox = new Rectangle(0, 0, 0, 0);
-
-			methodBox = getSprites(methodBlock, x, y);
-			System.out.println("METHOD:" + methodBox.width + "x"
-					+ methodBox.height);
-
-			y -= 2;
-			int iterx = x;
-			while (iterx < x + methodBox.width) {
-				comp = constructorCenter(iterx, y);
-				elem.addComposite(comp);
-				iterx++;
-			}
-			x = iterx;
-
-			comp = constructorRight(x, y);
-			elem.addComposite(comp);
-
-			// establecemos el tama�o final de esta composici�n de sprites
-			boundingBox.width += methodBox.width + 2 * comp.width + 2; // el
-																		// contenido
-																		// horizontal
-																		// del
-			// metodo mas el cuadro de
-			// inicio y el de final
-			if (comp.height + methodBox.height > boundingBox.height) {
-				boundingBox.height = comp.height + methodBox.height; // leny
-			}
-
-			System.out.println(boundingBox);
-			elem.rectangle = boundingBox;
-			return boundingBox;
+		case ASTNode.METHOD_DECLARATION:			
+			return getMethodDeclarationSprites(elem, x, y);
 
 		case ASTNode.BLOCK:
-			Rectangle childBox = null;
-
-			for (JavaMarioNode child : elem.children) {
-				childBox = getSprites(child, x, y);
-				x += childBox.width;
-				if (childBox.height > boundingBox.height) {
-					boundingBox.height = childBox.height;
-				}
-				boundingBox.width += childBox.width;
-			}
-
-			elem.rectangle = boundingBox;
-
-			System.out.println(boundingBox);
-			return boundingBox;
-
+			return getBlockSprites(elem, x, y);
+			
 		case ASTNode.EXPRESSION_STATEMENT:
-			
-			comp = expression(x, y);
-			boundingBox.width += comp.width; // lenx
-			if (comp.height > boundingBox.height) {
-				boundingBox.height = comp.height; // leny
-			}
-			elem.addComposite(comp);
-			x += comp.width;
-			
-			break;
-			
+			return getExpressionSprites(elem, x, y);
+						
 		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
-			
-			if (elem.children.get(0).getNodeType() == ASTNode.PRIMITIVE_TYPE){
-				for (int i = 1; i < elem.children.size() ; i++) {
-					comp = local(x, y);
-					elem.addComposite(comp);
-					y+=comp.height;
-					boundingBox.height += comp.height;
-					boundingBox.width = comp.width;
-				}
-			} 
-			elem.rectangle = boundingBox;
-
-			System.out.println(boundingBox);
-			return boundingBox;
-			
+			return getVariableDeclarationSprites(elem, x, y);
 
 		case ASTNode.RETURN_STATEMENT:
-			comp = ret(x, y);
-			boundingBox.x += comp.width; // lenx
-			if (comp.y + comp.height > boundingBox.y) {
-				boundingBox.y = comp.y + comp.height; // leny
-			}
-			elem.addComposite(comp);
-			x += comp.width;
-			break;
-
+			return getReturnSprites(elem, x, y);		
+					
 		case ASTNode.IF_STATEMENT:
-
-			int initx = x;
-			int inity = y;
-			JavaMarioNode elseNode = null;
-			
-			if(elem.children.size() == 3){
-				elseNode = elem.children.get(2);
-			}
-			
-			Rectangle elseBox = getSprites(elseNode, x+1, y);
-
-			JavaMarioNode thenNode = elem.children.get(1);
-			y += elseBox.height;
-			comp = ifLeft(x, y);
-			elem.addComposite(comp);
-
-			x += comp.width;
-			y += comp.height;
-
-			Rectangle thenBox = getSprites(thenNode, x, y); // the size of the
-															// corresponding
-			// part of stage
-			int soilLength = 0;
-			System.out.println("THEN:" + thenBox.x + "x" + thenBox.y);
-
-			y -= 2;
-			iterx = x;
-			soilLength = (thenBox.width > elseBox.width) ? thenBox.width : elseBox.width;
-
-			while (iterx < x + soilLength) {
-				comp = ifCenter(iterx, y);
-				elem.addComposite(comp);
-				iterx++;
-			}
-			x = iterx;
-
-			// final terrain
-			comp = ifRight(x, y);
-			
-			elem.addComposite(comp);
-
-			// rellenamos el fondo del else
-			for (int posx = 0; posx < soilLength+2; posx++) {
-				for (int posy = 0; posy < elseBox.height ; posy++) {
-					comp = mountain(initx + posx, inity + posy);
-					elem.addComposite(0, comp);
-				}
-			}
-			
-
-			// ajustar
-			boundingBox.width += soilLength + 4;
-			if (y + thenBox.height > boundingBox.height) {
-				boundingBox.height = y + thenBox.height; // leny
-			}
-			
-			return boundingBox;
+			return getIfStatementSprites(elem, x, y);
 
 		case ASTNode.FOR_STATEMENT:
-
-			JavaMarioNode forBlock = null;
-
-			// coger la lista de block
-			for (JavaMarioNode child : list) {
-				if (child.getNodeType() == ASTNode.BLOCK) {
-					forBlock = child;
-					break;
+		case ASTNode.ENHANCED_FOR_STATEMENT:
+			return getForStatementSprites(elem, x, y);		
+			
+		case ASTNode.SWITCH_STATEMENT:
+			return getSwitchStatementSprites(elem,x,y);
+		case ASTNode.SWITCH_CASE:
+			return getReturnSprites(elem, x, y);
+			
+		default:
+			if (elem.children != null) {
+				if (elem.children.size() > 0) {
+					return getSprites(elem.children.get(0), x, y);
 				}
 			}
+			return new Rectangle(x, y, 0, 0);
+			
+		}
+	}
 
-			comp = forTube(x, y);
-			elem.addComposite(comp);
-
-			x += comp.width;
-			y += comp.height;
-
-			Rectangle forBox = getSprites(forBlock, x, y);
-			System.out.println("METHOD:" + forBox.width + "x"
-					+ forBox.height);
-
-			y -= 2;
-			iterx = x;
-			while (iterx < x + forBox.width) {
-				comp = constructorCenter(iterx, y);
+	private Rectangle getSwitchStatementSprites(JavaMarioNode elem, int x, int y) {
+		System.out.println("---------SWITCH--------");
+		System.out.println(elem.toLongString());
+		// first create list of cases
+		ArrayList<JavaMarioNode> caseNodeList = new ArrayList<JavaMarioNode>();
+		ArrayList<JavaMarioNode> elemList = new ArrayList<JavaMarioNode>();
+		for (int i = 0; i<elem.children.size(); i++) {
+			// create list of elems in case
+			JavaMarioNode child = elem.children.get(i);
+			
+			if (child.nodeType == ASTNode.SWITCH_CASE && (elem.children.get(i-1).nodeType == ASTNode.BREAK_STATEMENT || i<=1)) {				
+				elemList = new ArrayList<JavaMarioNode>();
+				JavaMarioNode caseNode = new JavaMarioNode("BLOCK", ASTNode.BLOCK, child.getLineNumber());
+				caseNode.children = elemList;
+				caseNodeList.add(caseNode);
+			}
+			elemList.add(child);			
+		}
+		
+		
+		
+		Rectangle box = new Rectangle(x, y, 0, 0);
+		SpriteComposite door = ret(x, y);
+		elem.addComposite(door);
+		box = getUnionBox(box, door.box);
+		x += door.width;
+		for (JavaMarioNode n: caseNodeList) {
+			Rectangle blockBox = getSprites(n, x, y+1);
+			// add the platform at the bottom
+			for (int i=0; i<blockBox.width;i++) {
+				SpriteComposite comp = mountain(x+i, y);
 				elem.addComposite(comp);
-				iterx++;
 			}
-			x = iterx;
-
-			comp = forTube(x, y);
-			elem.addComposite(comp);
-
-			// establecemos el tama�o final de esta composici�n de sprites
-			boundingBox.width += forBox.width + 2 * comp.width + 2; // el
-																		// contenido
-																		// horizontal
-																		// del
-			// metodo mas el cuadro de
-			// inicio y el de final
-			if (comp.height + forBox.height > boundingBox.height) {
-				boundingBox.height = comp.height + forBox.height; // leny
-			}
-
-			System.out.println(boundingBox);
-			elem.rectangle = boundingBox;
-			return boundingBox;
-		default:
-
-			return getSprites(list.get(0), x, y);
-
+			blockBox.height += 2;
+			box = getUnionBox(box, blockBox);
+			y+=blockBox.height;			
 		}
-
-		return boundingBox;
+		
+		elem.rectangle = box;
+		return box;
 	}
 
-	/*
-	 * private JavaMarioNode FindBlock(JavaMarioNode list) { int i = 0; boolean
-	 * found = false; ArrayList blockList = null; while (i<list.size() &&
-	 * !found) { JavaMarioNode n = (JavaMarioNode) list.get(i); if (n.nodeType
-	 * == ASTNode.BLOCK) { found = true; blockList = (ArrayList) list.get(i+1);
-	 * } i+=2; } return blockList; }
-	 */
-	private ArrayList getThenList(ArrayList list) {
-
-		ArrayList blockList = null;
-		JavaMarioNode n = (JavaMarioNode) list.get(2);
-
-		if (n.getNodeType() != ASTNode.BLOCK) {
-			blockList = new ArrayList();
-			blockList.add(list.get(2));
-			blockList.add(list.get(3));
-		} else {
-			blockList = (ArrayList) list.get(3);
-		}
-
-		return blockList;
-	}
-
-	private ArrayList getElseList(ArrayList list) {
-
-		ArrayList blockList = null;
-
-		// si no tiene parte else la lista tiene 4 elementos (expresion,
-		// listaExpresion, then, listaThen)
-		// La parte else siempre esta en la posici�n 4, si es un block se
-		// devuelve el contenido del block (la lista en la posici�n 5) si no,
-		// se crea una lista y se mete el 4 y el 5.
-
-		if (list.size() == 4) {
-			return blockList;
-		} else {
-			JavaMarioNode n = (JavaMarioNode) list.get(4);
-
-			if (n.getNodeType() != ASTNode.BLOCK) {
-				blockList = new ArrayList();
-				blockList.add(list.get(4));
-				blockList.add(list.get(5));
-			} else {
-				blockList = (ArrayList) list.get(5);
-			}
-			return blockList;
-		}
-
-	}
 }

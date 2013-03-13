@@ -350,7 +350,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										painter.paintTree(visitor.root);	
 										
 										//M�todo nuevo:
-										painter.paintTreeDebug(visitor.root);
+										//painter.paintTreeDebug(visitor.root);
 										
 										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
 										gc.dispose();
