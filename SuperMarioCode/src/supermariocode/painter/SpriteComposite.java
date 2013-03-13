@@ -21,7 +21,12 @@ package supermariocode.painter;
 
 import java.util.ArrayList;
 
+import org.eclipse.swt.graphics.Rectangle;
+
 public class SpriteComposite {
+	
+	Rectangle box;
+	
 	int x;
 	int y;
 	int width;
@@ -64,6 +69,7 @@ public class SpriteComposite {
 		spriteList = new ArrayList();
 		this.x = x;
 		this.y = y;
+		this.box = new Rectangle(x, y, 0, 0);
 	};
 	
 	public boolean addSprite(Sprite s, int mwx, int mwy) {
@@ -72,6 +78,10 @@ public class SpriteComposite {
 			width = mwx+1;
 		if (mwy+1>height)
 			height = mwy+1;
+		
+		box.width = width;
+		box.height = height;
+		
 		spriteList.add(s);
 		return true;
 	};
