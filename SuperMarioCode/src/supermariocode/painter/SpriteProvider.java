@@ -128,33 +128,42 @@ public class SpriteProvider {
 
 		return comp;
 	}
+	
+	
+	public Rectangle type_declaration(JavaMarioNode elem, int x, int y) {
+		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
+		for (JavaMarioNode child : elem.children) {
+			if (child.getNodeType() == ASTNode.METHOD_DECLARATION) {
+				Rectangle r = getSprites(child, x, y);
+				x += r.width;
+				boundingBox.width += r.width;
+				if (r.height > boundingBox.height) {
+					boundingBox.height = r.height;
+				}
+			}
+		}
+		return boundingBox;		
+		
+	}
 
+	
 	public Rectangle getSprites(JavaMarioNode elem, int x, int y) {
 		System.out.println(elem.name + "  Posici�n: " + x + " " + y);
 		// Devolver el tama�o total de la composici�n
 		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
 		
-		if(elem == null){
-			return boundingBox;	
+		if(elem == null) {
+			return boundingBox;
 		}
+		
 		ArrayList<JavaMarioNode> list = elem.children;
 		SpriteComposite comp;
 
 		switch (elem.getNodeType()) {
 
-		case ASTNode.TYPE_DECLARATION:
-			for (JavaMarioNode child : elem.children) {
-				if (child.getNodeType() == ASTNode.METHOD_DECLARATION) {
-					Rectangle r = getSprites(child, x, y);
-					x += r.width;
-					boundingBox.width += r.width;
-					if (r.height > boundingBox.height) {
-						boundingBox.height = r.height;
-					}
-				}
-			}
+		case ASTNode.TYPE_DECLARATION:			
 
-			return boundingBox;
+			return type_declaration(elem, x, y);
 
 		case ASTNode.FIELD_DECLARATION:
 			comp = field(x, y);
