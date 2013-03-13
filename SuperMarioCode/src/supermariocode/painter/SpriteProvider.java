@@ -362,11 +362,65 @@ public class SpriteProvider {
 			return getIfStatementSprites(elem, x, y);
 
 		case ASTNode.FOR_STATEMENT:
-			return getForStatementSprites(elem, x, y);			
+		case ASTNode.ENHANCED_FOR_STATEMENT:
+			return getForStatementSprites(elem, x, y);		
+			
+		case ASTNode.SWITCH_STATEMENT:
+			return getSwitchStatementSprites(elem,x,y);
+		case ASTNode.SWITCH_CASE:
+			return getReturnSprites(elem, x, y);
 			
 		default:
-			return getSprites(elem.children.get(0), x, y);
+			if (elem.children != null) {
+				if (elem.children.size() > 0) {
+					return getSprites(elem.children.get(0), x, y);
+				}
+			}
+			return new Rectangle(x, y, 0, 0);
+			
 		}
+	}
+
+	private Rectangle getSwitchStatementSprites(JavaMarioNode elem, int x, int y) {
+		System.out.println("---------SWITCH--------");
+		System.out.println(elem.toLongString());
+		// first create list of cases
+		ArrayList<JavaMarioNode> caseNodeList = new ArrayList<JavaMarioNode>();
+		ArrayList<JavaMarioNode> elemList = new ArrayList<JavaMarioNode>();
+		for (int i = 0; i<elem.children.size(); i++) {
+			// create list of elems in case
+			JavaMarioNode child = elem.children.get(i);
+			
+			if (child.nodeType == ASTNode.SWITCH_CASE && (elem.children.get(i-1).nodeType == ASTNode.BREAK_STATEMENT || i<=1)) {				
+				elemList = new ArrayList<JavaMarioNode>();
+				JavaMarioNode caseNode = new JavaMarioNode("BLOCK", ASTNode.BLOCK, child.getLineNumber());
+				caseNode.children = elemList;
+				caseNodeList.add(caseNode);
+			}
+			elemList.add(child);			
+		}
+		
+		
+		
+		Rectangle box = new Rectangle(x, y, 0, 0);
+		SpriteComposite door = ret(x, y);
+		elem.addComposite(door);
+		box = getUnionBox(box, door.box);
+		x += door.width;
+		for (JavaMarioNode n: caseNodeList) {
+			Rectangle blockBox = getSprites(n, x, y+1);
+			// add the platform at the bottom
+			for (int i=0; i<blockBox.width;i++) {
+				SpriteComposite comp = mountain(x+i, y);
+				elem.addComposite(comp);
+			}
+			blockBox.height += 2;
+			box = getUnionBox(box, blockBox);
+			y+=blockBox.height;			
+		}
+		
+		elem.rectangle = box;
+		return box;
 	}
 
 }

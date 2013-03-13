@@ -60,16 +60,18 @@ public class JavaMarioNode {
 		
 	}
 	public String toString(){
-		//return "JavaMarioNode: "+ name+"\n"+ "CompositeList: "+ compList.toString()+"\n";
-		/*String str = name + " [";
+		return name;
+	}
+	
+	public String toLongString(){
+		
+		String str = name + " [";
 		for(JavaMarioNode mn: this.children) {
 			str+= " " + mn.toString();
 		}
 		str += " ]";
-		return str ;*/
-		return name;
+		return str ;		
 	}
-	
 	void calculateBounds(){
 		for(int i=0; i < compList.size(); i++){
 			//componente x inicial:
