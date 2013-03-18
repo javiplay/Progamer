@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
+import supermariocode.painter.nodes.JavaMarioNode;
 import supermariocode.views.MarioCodeView;
 
 public class MarioPainter {
@@ -42,7 +43,7 @@ public class MarioPainter {
 	public Image imgBG;
 	public GC g;
 
-	// Para añadir colores a los rectangulos:
+	// Para aï¿½adir colores a los rectangulos:
 	Device d;
 	Color magenta;
 	Color green;
@@ -75,7 +76,7 @@ public class MarioPainter {
 		cyan = d.getSystemColor(SWT.COLOR_CYAN);
 		gray = d.getSystemColor(SWT.COLOR_GRAY);
 		
-		// Añadimos a un array los diferentes colores:
+		// Aï¿½adimos a un array los diferentes colores:
 		colors = new ArrayList();
 		colors.add(black);
 		colors.add(cyan);
@@ -106,10 +107,10 @@ public class MarioPainter {
 
 	}
 
-	// Método que agrega rectángulos para el modo debug:
+	// Mï¿½todo que agrega rectï¿½ngulos para el modo debug:
 	public void paintTreeDebug(JavaMarioNode mn) {
 
-		//Añadimos un estilo de línea a los rectángulos
+		//Aï¿½adimos un estilo de lï¿½nea a los rectï¿½ngulos
 		g.setLineStyle(SWT.LINE_DOT);
 		g.setLineWidth(2);
 		//Asignamos el color:

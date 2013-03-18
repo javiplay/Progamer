@@ -16,17 +16,19 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
     */
 
-package supermariocode.painter;
+package supermariocode.painter.nodes;
 
 import java.util.ArrayList;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.swt.graphics.Rectangle;
 
+import supermariocode.painter.SpriteComposite;
+
 public class JavaMarioNode {
-	String name;
-	int nodeType;
-	ArrayList<SpriteComposite> compList;
+	public String name;
+	public int nodeType;
+	public ArrayList<SpriteComposite> compList;
 	int lineNumber;
 	public Rectangle rectangle;
 	public ArrayList<JavaMarioNode> children;
@@ -72,6 +74,19 @@ public class JavaMarioNode {
 		str += " ]";
 		return str ;		
 	}
+	
+	
+	public Rectangle getSprites(int x, int y) {
+		
+		if (children != null) {
+			if (children.size() > 0) {
+				return children.get(0).getSprites(x, y);
+			}
+		}
+		return new Rectangle(x, y, 0, 0);		
+	}
+	
+	
 	void calculateBounds(){
 		for(int i=0; i < compList.size(); i++){
 			//componente x inicial:
@@ -102,5 +117,6 @@ public class JavaMarioNode {
 		}
 		return null;
 	}
+
 	
 }

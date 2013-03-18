@@ -25,12 +25,12 @@ import org.eclipse.swt.graphics.Rectangle;
 
 public class SpriteComposite {
 	
-	Rectangle box;
+	public Rectangle box;
 	
-	int x;
-	int y;
-	int width;
-	int height;
+	public int x;
+	public int y;
+	public int width;
+	public int height;
 	
 	
 	public Sprite noneSprite 				= new Sprite("noneSprite", 0, 0);

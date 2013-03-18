@@ -29,7 +29,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import supermariocode.painter.JavaMarioNode;
+import supermariocode.painter.nodes.*;
+
 
 class TreeVisitor extends ASTVisitor {
 	JavaMarioNode root;
@@ -51,14 +52,63 @@ class TreeVisitor extends ASTVisitor {
 
 		JavaMarioNode current = (JavaMarioNode) stack.peek();
 		CompilationUnit cu = (CompilationUnit) node.getRoot();
-		int codeLine = cu.getLineNumber(node.getStartPosition());
-		JavaMarioNode child = new JavaMarioNode(name, node.getNodeType(),
-				codeLine);
+		int linenumber = cu.getLineNumber(node.getStartPosition());
+		int nodeType = node.getNodeType();
+		
+		JavaMarioNode child = null;
+		// añadir objeto según tipo
+		switch (nodeType) {
+		
+		case ASTNode.TYPE_DECLARATION: 
+			child = new TypeDeclarationNode(name, nodeType, linenumber);			
+			break;
+			
 
-		// System.out.println("Linea: " + codeLine + " nombre: " + name);
+		case ASTNode.FIELD_DECLARATION:
+			child = new VariableDeclarationStatementNode(name, nodeType, linenumber);
+			break;			
 
+		case ASTNode.METHOD_DECLARATION:
+			child = new MethodDeclarationNode(name, nodeType, linenumber);
+			break;  
+
+		case ASTNode.BLOCK:
+			child = new BlockDeclarationNode(name, nodeType, linenumber);
+			break;
+			
+		case ASTNode.EXPRESSION_STATEMENT:
+			child = new ExpressionStatementNode(name, nodeType, linenumber);
+			break;
+						
+		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
+			child = new VariableDeclarationStatementNode(name, nodeType, linenumber);
+			break;
+
+		case ASTNode.SWITCH_CASE:			
+		case ASTNode.RETURN_STATEMENT:
+			child = new ReturnStatementNode(name, nodeType, linenumber);
+			break;		
+					
+		case ASTNode.IF_STATEMENT:
+			child = new IfStatementNode(name, nodeType, linenumber);
+			break;
+
+		case ASTNode.FOR_STATEMENT:
+		case ASTNode.ENHANCED_FOR_STATEMENT:
+			child = new ForStatementNode(name, nodeType, linenumber);
+			break;		
+			
+		case ASTNode.SWITCH_STATEMENT:
+			child = new SwitchStatementNode(name, nodeType, linenumber);
+			break;
+			
+		default:
+			child = new JavaMarioNode(name, nodeType, linenumber);
+		
+		}
+		
 		current.children.add(child);
-		addToHashMap(codeLine, child);
+		addToHashMap(linenumber, child);
 
 		stack.push(child);
 	}

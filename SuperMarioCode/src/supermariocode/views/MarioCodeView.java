@@ -328,8 +328,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										String l = visitor.toString();
 										System.out.println(l);
 										
-										SpriteProvider sp = new SpriteProvider();
-										Rectangle tempBox = sp.getSprites(visitor.root, 0, 0);
+										
+										Rectangle tempBox = visitor.root.getSprites( 0, 0);
 										Rectangle drawingBox = new Rectangle(tempBox.x*16, tempBox.y*16, tempBox.width*16+32, tempBox.height*16+32);
 										System.out.println(visitor.root.toString());
 										System.out.println("X="+drawingBox.x+",Y="+drawingBox.y);
