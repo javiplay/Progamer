@@ -35,6 +35,9 @@ public class SpriteComposite {
 	
 	public Sprite noneSprite 				= new Sprite("noneSprite", 0, 0);
 	
+	public Sprite brick 					= new Sprite("brick", 310,114);
+	
+	
 	public Sprite strangeYellowBox 			= new Sprite("strangeYellowBox", 274,64);
 	public Sprite normalYellowBox 			= new Sprite("normalYellowBox", 173,164);
 	public Sprite questionYellowBox 		= new Sprite("questionYellowBox", 207,181);
@@ -60,7 +63,7 @@ public class SpriteComposite {
 	public Sprite tubeGreenLeftSideDown 	= new Sprite("tubeGreenLeftSideDown",1,195);
 	public Sprite tubeGreenRightSideUp 		= new Sprite("tubeGreenRightSideUp",18,178);
 	public Sprite tubeGreenRihtSideDown 	= new Sprite("tubeGreenRihtSideDown",18,195);
-	//TODO, que posicion del sprite corresponde al mario
+	
 	
 	
 	public ArrayList<Sprite> spriteList;

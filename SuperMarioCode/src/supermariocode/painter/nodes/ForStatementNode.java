@@ -19,7 +19,7 @@ public class ForStatementNode extends JavaMarioNode {
 
 		Rectangle boundingBox = new Rectangle(x, y, 0, 0);
 		JavaMarioNode block = elem.getFirstChildOfType(ASTNode.BLOCK);
-		SpriteComposite comp = SpriteProvider.forTube(x, y);		
+		SpriteComposite comp = SpriteProvider.forTubeLeft(x, y);		
 		elem.addComposite(comp);
 		x += comp.width;
 		y += comp.height;
@@ -33,7 +33,7 @@ public class ForStatementNode extends JavaMarioNode {
 			iterx++;
 		}
 		x += iterx;
-		comp = SpriteProvider.forTube(x, y);
+		comp = SpriteProvider.forTubeRight(x, y);
 		elem.addComposite(comp);
 		boundingBox = SpriteProvider.getUnionBox(boundingBox, comp.box);
 	

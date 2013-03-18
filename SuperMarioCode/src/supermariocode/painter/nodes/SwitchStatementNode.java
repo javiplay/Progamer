@@ -46,7 +46,7 @@ public class SwitchStatementNode extends JavaMarioNode {
 			Rectangle blockBox = n.getSprites(x, y+1);
 			// add the platform at the bottom
 			for (int i=0; i<blockBox.width;i++) {
-				SpriteComposite comp = SpriteProvider.mountain(x+i, y);
+				SpriteComposite comp = SpriteProvider.brick(x+i, y);
 				elem.addComposite(comp);
 			}
 			blockBox.height += 2;

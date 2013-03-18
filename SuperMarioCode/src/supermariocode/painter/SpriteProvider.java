@@ -89,6 +89,13 @@ public class SpriteProvider {
 		comp.addSprite(comp.landMountain, 0, 0);
 		return comp;
 	}
+	
+	
+	public static SpriteComposite brick(int x, int y) {
+		SpriteComposite comp = new SpriteComposite(x, y);
+		comp.addSprite(comp.brick, 0, 0);
+		return comp;
+	}
 
 	public static SpriteComposite leftMountain(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
@@ -117,19 +124,31 @@ public class SpriteProvider {
 		return comp;
 	}
 
-	public static SpriteComposite forTube(int x, int y) {
+	public static SpriteComposite forTubeLeft(int x, int y) {
+		SpriteComposite comp = new SpriteComposite(x, y);
+		comp.addSprite(comp.noneSprite, 0, 0);
+		comp.addSprite(comp.tubeGreenLeftSideDown, 1, 0);
+		comp.addSprite(comp.tubeGreenLeftSideUp, 1, 1);
+		comp.addSprite(comp.tubeGreenRihtSideDown, 2, 0);
+		comp.addSprite(comp.tubeGreenRightSideUp, 2, 1);
+		//comp.addSprite(comp.noneSprite, 3, 0);
+
+		return comp;
+	}
+	
+
+	public static SpriteComposite forTubeRight(int x, int y) {
 		SpriteComposite comp = new SpriteComposite(x, y);
 		//comp.addSprite(comp.noneSprite, 0, 0);
 		comp.addSprite(comp.tubeGreenLeftSideDown, 0, 0);
 		comp.addSprite(comp.tubeGreenLeftSideUp, 0, 1);
 		comp.addSprite(comp.tubeGreenRihtSideDown, 1, 0);
 		comp.addSprite(comp.tubeGreenRightSideUp, 1, 1);
-		//comp.addSprite(comp.noneSprite, 3, 0);
+		comp.addSprite(comp.noneSprite, 2, 0);
 
 		return comp;
 	}
-	
-	
+
 	public static Rectangle getUnionBox(Rectangle r1, Rectangle r2) {
 		
 		Rectangle unionBox = new Rectangle(0, 0, 0, 0);
