@@ -33,14 +33,21 @@ import supermariocode.painter.nodes.*;
 
 
 class TreeVisitor extends ASTVisitor {
+	
 	JavaMarioNode root;
+	ASTNode rootAST;
 	Stack stack;
 	Map<Integer, ArrayList<JavaMarioNode>> hm = new HashMap<Integer, ArrayList<JavaMarioNode>>();
 
-	public TreeVisitor() {
-		super();
+	public TreeVisitor(ASTNode rootAST) {
+		super();		
+		this.rootAST = rootAST;
+		
+		
 		root = new JavaMarioNode("ROOT", -1, -1);
+		
 		stack = new Stack();
+		
 		stack.push(root);
 	}
 
@@ -51,64 +58,64 @@ class TreeVisitor extends ASTVisitor {
 		name = name.substring(name.lastIndexOf('.') + 1);
 
 		JavaMarioNode current = (JavaMarioNode) stack.peek();
-		CompilationUnit cu = (CompilationUnit) node.getRoot();
-		int linenumber = cu.getLineNumber(node.getStartPosition());
+		
+		int offset = node.getStartPosition();
 		int nodeType = node.getNodeType();
 		
 		JavaMarioNode child = null;
+		
 		// añadir objeto según tipo
 		switch (nodeType) {
 		
 		case ASTNode.TYPE_DECLARATION: 
-			child = new TypeDeclarationNode(name, nodeType, linenumber);			
-			break;
-			
+			child = new TypeDeclarationNode(name, nodeType, offset);			
+			break;			
 
 		case ASTNode.FIELD_DECLARATION:
-			child = new VariableDeclarationStatementNode(name, nodeType, linenumber);
+			child = new VariableDeclarationStatementNode(name, nodeType, offset);
 			break;			
 
 		case ASTNode.METHOD_DECLARATION:
-			child = new MethodDeclarationNode(name, nodeType, linenumber);
+			child = new MethodDeclarationNode(name, nodeType, offset);
 			break;  
 
 		case ASTNode.BLOCK:
-			child = new BlockDeclarationNode(name, nodeType, linenumber);
+			child = new BlockDeclarationNode(name, nodeType, offset);
 			break;
 			
 		case ASTNode.EXPRESSION_STATEMENT:
-			child = new ExpressionStatementNode(name, nodeType, linenumber);
+			child = new ExpressionStatementNode(name, nodeType, offset);
 			break;
 						
 		case ASTNode.VARIABLE_DECLARATION_STATEMENT:
-			child = new VariableDeclarationStatementNode(name, nodeType, linenumber);
+			child = new VariableDeclarationStatementNode(name, nodeType, offset);
 			break;
 
 		case ASTNode.SWITCH_CASE:			
 		case ASTNode.RETURN_STATEMENT:
-			child = new ReturnStatementNode(name, nodeType, linenumber);
+			child = new ReturnStatementNode(name, nodeType, offset);
 			break;		
 					
 		case ASTNode.IF_STATEMENT:
-			child = new IfStatementNode(name, nodeType, linenumber);
+			child = new IfStatementNode(name, nodeType, offset);
 			break;
 
 		case ASTNode.FOR_STATEMENT:
 		case ASTNode.ENHANCED_FOR_STATEMENT:
-			child = new ForStatementNode(name, nodeType, linenumber);
+			child = new ForStatementNode(name, nodeType, offset);
 			break;		
 			
 		case ASTNode.SWITCH_STATEMENT:
-			child = new SwitchStatementNode(name, nodeType, linenumber);
+			child = new SwitchStatementNode(name, nodeType, offset);
 			break;
 			
 		default:
-			child = new JavaMarioNode(name, nodeType, linenumber);
+			child = new JavaMarioNode(name, nodeType, offset);
 		
 		}
 		
 		current.children.add(child);
-		addToHashMap(linenumber, child);
+		addToHashMap(offset, child);
 
 		stack.push(child);
 	}
@@ -139,19 +146,6 @@ class TreeVisitor extends ASTVisitor {
 
 		return root.toString();
 	}
-	/**
-	 * 
-	 * @param lista : Lista de rectangulos
-	 * @param p: Punto
-	 * @return : Lista de rectangulos que contienen al punto Punto
-	 */
-	public ArrayList<Rectangle> getRectangles(ArrayList<Rectangle> lista, Point p){
-		ArrayList<Rectangle> contenidos = new ArrayList<Rectangle>();
-		
-		for (Rectangle rc : lista)
-			if ( rc.contains(p) )
-				contenidos.add(rc);
-		return contenidos;
-	}
+	
 
 }

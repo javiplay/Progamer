@@ -9,8 +9,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class ForStatementNode extends JavaMarioNode {
 
-	public ForStatementNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public ForStatementNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 	

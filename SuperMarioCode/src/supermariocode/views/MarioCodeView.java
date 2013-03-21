@@ -71,9 +71,13 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.texteditor.ITextEditor;
+
 
 import supermariocode.painter.MarioPainter;
 import supermariocode.painter.SpriteProvider;
@@ -183,6 +187,17 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 			public void mouseDoubleClick(MouseEvent e) {
 				// TODO Auto-generated method stub			
 				System.out.println("x: "+e.x+", y:"+e.y);
+				int voffset = myCanvas.getVerticalBar().getSelection();
+				int hoffset = myCanvas.getHorizontalBar().getSelection();
+				Point p = new Point(0,0);
+				p.x = (e.x + hoffset)/16;
+				p.y = (drawingBox.height - (e.y + voffset))/16 - 1;
+				System.out.println(p);
+				int offset = visitor.root.getOffset(p);
+				System.out.println(visitor.root.getOffset(p));
+				ITextEditor editor = (ITextEditor) getSite().getPage().getActiveEditor();
+				editor.selectAndReveal(offset, 0);
+				getSite().getPage().activate(getSite().getPage().getActiveEditor());
 				
 			}
 		});		
@@ -292,6 +307,8 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	}
 	
 	
+	TreeVisitor visitor;
+	Rectangle drawingBox;
 	private void makeActions() {
 		
 		/* Action 1 */
@@ -322,7 +339,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										//AST Arbol sintactico
 										// Now create the AST for the ICompilationUnits
 										CompilationUnit parse = parse(unit);
-										TreeVisitor visitor = new TreeVisitor();
+										visitor = new TreeVisitor(parse);
 										parse.accept(visitor);
 										System.out.println(" Nodos en linea 4: " + visitor.hm);
 										String l = visitor.toString();
@@ -330,7 +347,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 										
 										
 										Rectangle tempBox = visitor.root.getSprites( 0, 0);
-										Rectangle drawingBox = new Rectangle(tempBox.x*16, tempBox.y*16, tempBox.width*16+32, tempBox.height*16+32);
+										drawingBox = new Rectangle(tempBox.x*16, tempBox.y*16, tempBox.width*16, tempBox.height*16);
 										System.out.println(visitor.root.toString());
 										System.out.println("X="+drawingBox.x+",Y="+drawingBox.y);
 										
@@ -495,8 +512,11 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 			if (c.getName().equals("org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor")) {
 				
 				IEditorPart editor = (IEditorPart) part;
+				ITextEditor ed = (ITextEditor) editor;
 				
 				StyledText st = (StyledText) editor.getAdapter(Control.class);
+			
+				
 				
 				try {
 				if (st.getListeners(0).length==0){

@@ -7,8 +7,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class BlockDeclarationNode extends JavaMarioNode {
 
-	public BlockDeclarationNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public BlockDeclarationNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 

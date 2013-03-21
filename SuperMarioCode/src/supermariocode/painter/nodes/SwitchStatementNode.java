@@ -11,8 +11,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class SwitchStatementNode extends JavaMarioNode {
 
-	public SwitchStatementNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public SwitchStatementNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -28,7 +28,7 @@ public class SwitchStatementNode extends JavaMarioNode {
 			
 			if (child.nodeType == ASTNode.SWITCH_CASE && (elem.children.get(i-1).nodeType == ASTNode.BREAK_STATEMENT || i<=1)) {				
 				elemList = new ArrayList<JavaMarioNode>();
-				JavaMarioNode caseNode = new BlockDeclarationNode("BLOCK", ASTNode.BLOCK, child.getLineNumber());
+				JavaMarioNode caseNode = new BlockDeclarationNode("BLOCK", ASTNode.BLOCK, child.offset);
 				caseNode.children = elemList;
 				caseNodeList.add(caseNode);
 			}

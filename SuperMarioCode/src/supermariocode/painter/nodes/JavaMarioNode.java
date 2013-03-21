@@ -18,38 +18,34 @@
 
 package supermariocode.painter.nodes;
 
+
 import java.util.ArrayList;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
 import supermariocode.painter.SpriteComposite;
+import supermariocode.painter.SpriteProvider;
 
 public class JavaMarioNode {
 	public String name;
 	public int nodeType;
 	public ArrayList<SpriteComposite> compList;
-	int lineNumber;
+	int offset;
 	public Rectangle rectangle;
 	public ArrayList<JavaMarioNode> children;
 	
-	public JavaMarioNode(String name, int nodeType, int _linenumber){
+	public JavaMarioNode(String name, int nodeType, int offset){
 		this.name = name;
 		this.nodeType = nodeType;
 		this.compList = new ArrayList<SpriteComposite>();
-		this.lineNumber = _linenumber;
+		this.offset = offset;
 		rectangle = new Rectangle(0, 0, 0, 0);
 		children = new ArrayList<JavaMarioNode>();
 	}
 
-	public int getLineNumber(){
-		return lineNumber;
-	}
-	
-	public void setLineNumber(int currLine){
-		this.lineNumber = currLine;
-	}
-	
+
 	public int getNodeType() {
 		return nodeType;
 	}
@@ -77,13 +73,14 @@ public class JavaMarioNode {
 	
 	
 	public Rectangle getSprites(int x, int y) {
+
+		rectangle.x = x;
+		rectangle.y = y;
 		
-		if (children != null) {
-			if (children.size() > 0) {
-				return children.get(0).getSprites(x, y);
-			}
+		for (JavaMarioNode child: children) {
+			rectangle = SpriteProvider.getUnionBox(rectangle, child.getSprites(x, y) );
 		}
-		return new Rectangle(x, y, 0, 0);		
+		return rectangle;		
 	}
 	
 	
@@ -118,5 +115,24 @@ public class JavaMarioNode {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param p: Point
+	 * @return : The corresponding line of code for that element. 
+	 */
+	public int  getOffset(Point p) {
+		
+		for (JavaMarioNode child: children) {
+				if (child.rectangle.contains(p)) {
+					return child.getOffset(p);
+				}
+		}			
+
+		if (rectangle.contains(p)) {
+			return offset;
+		}
+		else 
+			return -1;
+	}
 	
 }

@@ -8,8 +8,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class ReturnStatementNode extends JavaMarioNode {
 
-	public ReturnStatementNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public ReturnStatementNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 	

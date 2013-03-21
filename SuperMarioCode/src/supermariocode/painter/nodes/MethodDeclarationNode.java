@@ -9,8 +9,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class MethodDeclarationNode extends JavaMarioNode {
 
-	public MethodDeclarationNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public MethodDeclarationNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 	

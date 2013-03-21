@@ -8,8 +8,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class TypeDeclarationNode extends JavaMarioNode {
 
-	public TypeDeclarationNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public TypeDeclarationNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -22,6 +22,7 @@ public class TypeDeclarationNode extends JavaMarioNode {
 				x += r.width;
 			}
 		}
+		elem.rectangle = boundingBox;		
 		return boundingBox;				
 	}
 	

@@ -8,8 +8,8 @@ import supermariocode.painter.SpriteProvider;
 
 public class IfStatementNode extends JavaMarioNode {
 
-	public IfStatementNode(String name, int nodeType, int _linenumber) {
-		super(name, nodeType, _linenumber);
+	public IfStatementNode(String name, int nodeType, int offset) {
+		super(name, nodeType, offset);
 		// TODO Auto-generated constructor stub
 	}
 	Rectangle getIfStatementSprites(JavaMarioNode elem, int x, int y) {
