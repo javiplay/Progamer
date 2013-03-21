@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
 import supermariocode.painter.nodes.JavaMarioNode;
-import supermariocode.views.MarioCodeView;
+import supermariocode.views.MaryoCodeView;
 
 public class MarioPainter {
 
@@ -58,10 +58,10 @@ public class MarioPainter {
 	
 	public MarioPainter(int base, GC g) {
 
-		img = new Image(MarioCodeView.myCanvas.getDisplay(),
-				MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
-		imgBG = new Image(MarioCodeView.myCanvas.getDisplay(),
-				MarioCodeView.class.getResourceAsStream("background1.jpg"));
+		img = new Image(MaryoCodeView.myCanvas.getDisplay(),
+				MaryoCodeView.class.getResourceAsStream("smwtileset.gif"));
+		imgBG = new Image(MaryoCodeView.myCanvas.getDisplay(),
+				MaryoCodeView.class.getResourceAsStream("background1.jpg"));
 		this.base = base;
 		this.g = g;
 
@@ -98,7 +98,7 @@ public class MarioPainter {
 
 			for (Sprite s : sc.spriteList) {
 				g.drawImage(img, s.x, s.y, scale, scale, s.posx * scale, base
-						- (s.posy + 1) * scale, scale, scale);
+						- (s.posy) * scale, scale, scale);
 			}
 		}
 		for (JavaMarioNode child : content) {
@@ -116,18 +116,14 @@ public class MarioPainter {
 		//Asignamos el color:
 		g.setForeground((Color) colors.get(index));
 		//Lo dibujamos:
-		g.drawRectangle(mn.rectangle.x * scale, base - (mn.rectangle.y + mn.rectangle.height) * scale,
+		g.drawRectangle(mn.rectangle.x * scale, base - (mn.rectangle.y - 1 + mn.rectangle.height) * scale,
 				mn.rectangle.width * scale, mn.rectangle.height * scale);
 		
 		for (JavaMarioNode child : mn.children) {
 			
-			index = (index + 1)% colors.size();
-			paintTreeDebug(child);
-			
-			index--;
-			if (index < 0) {
-				index = colors.size()-1;
-			}
+			index = (index + 1) % colors.size();
+			paintTreeDebug(child);			
+			index = (index + colors.size() - 1) % colors.size();
 		}
 
 	}

@@ -21,14 +21,9 @@ package supermariocode.views;
 
 
 
-import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -37,6 +32,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -61,7 +57,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -104,7 +99,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * <p>
  */
 
-public class MarioCodeView extends ViewPart implements ISelectionListener {
+public class MaryoCodeView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -140,7 +135,7 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	/**
 	 * The constructor.
 	 */
-	public MarioCodeView() {
+	public MaryoCodeView() {
 	}
 
 	/**
@@ -149,11 +144,12 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 	 */
 	public void createPartControl(Composite parent) {
 		
+		
 	    control = parent;	   
 		myCanvas = new Canvas(control, SWT.H_SCROLL | SWT.V_SCROLL);
 
-		image2 = new Image(MarioCodeView.myCanvas.getDisplay(),
-    			MarioCodeView.class.getResourceAsStream("background1.jpg"));
+		image2 = new Image(MaryoCodeView.myCanvas.getDisplay(),
+    			MaryoCodeView.class.getResourceAsStream("background1.jpg"));
 
         //myCanvas.setBackgroundImage(image2);
         //labelState = new Label(parent, SWT.WRAP);
@@ -205,74 +201,13 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 		
 		// probando esto...de los resource listener 
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IResourceChangeListener listener = new myResourceListener();
+		IResourceChangeListener listener = new MaryoResourceListener();
 		workspace.addResourceChangeListener(listener);
 		
 		makeActions();
 		contributeToActionBars();
 	}
 	
-	public class myResourceListener implements IResourceChangeListener 
-	{
-		@Override
-		public void resourceChanged(IResourceChangeEvent event) {
-				// TODO Auto-generated method stub
-			
-			if (event.getType() ==  IResourceChangeEvent.POST_CHANGE) {
-				
-				final ArrayList<IResource> changed = new ArrayList<IResource>();
-				IResourceDelta rootDelta = event.getDelta();
-
-				//definimos el visitante
-				IResourceDeltaVisitor visitor = new IResourceDeltaVisitor() {
-		            public boolean visit(IResourceDelta delta) {
-		               //only interested in changed resources (not added or removed)
-		               if (delta.getKind() != IResourceDelta.CHANGED)
-		                  return true;
-		               //only interested in content changes
-		               if ((delta.getFlags() & IResourceDelta.CONTENT) == 0)
-		                  return true;
-		               IResource resource = delta.getResource();
-		               //only interested in files with the "java" extension
-		               if (resource.getType() == IResource.FILE && 
-						"java".equalsIgnoreCase(resource.getFileExtension())) {
-		                  changed.add(resource);
-		               }
-		               return true;
-		            }
-		         };
-		         try {
-		             rootDelta.accept(visitor);
-		          } catch (CoreException e) {
-		             //open error dialog with syncExec or print to plugin log file
-		          }
-
-				
-
-		        if (changed.size()>0){
-					System.out.println("Evento resourceChanged (tipo POST_CHANGE)");
-					for (IResource res: changed ) {
-						System.out.println("Resource: "+ res.getName());				
-					}
-					System.out.println("-----------------------------------------");
-		        }
-				
-				
-				// actualizaci�n de la interfaz
-				Display disp = control.getDisplay();
-				disp.asyncExec(new Runnable() {					
-					@Override
-					public void run() {
-						//label.setText(label.getText()+"\nEvent type: CHANGED");
-
-										
-					}
-				});					
-			}
-		}
-	}
-
-
 	private void contributeToActionBars() {
 		IActionBars bars = getViewSite().getActionBars();
 		fillLocalPullDown(bars.getMenuManager());
@@ -325,146 +260,152 @@ public class MarioCodeView extends ViewPart implements ISelectionListener {
 				
 				// Loop over all projects
 				for (IProject project : projects) {
-					try {
-						if (project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
+					
+						try {
+							if (project.isNatureEnabled("org.eclipse.jdt.core.javanature")) {
 
-							//Obtiene la lista de paquetes de proyectos java
-							IPackageFragment[] packages = JavaCore.create(project)
-									.getPackageFragments();
-							// parse(JavaCore.create(project));
-							for (IPackageFragment mypackage : packages) {
-								if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
-									for (ICompilationUnit unit : mypackage
-											.getCompilationUnits()) {
-										//AST Arbol sintactico
-										// Now create the AST for the ICompilationUnits
-										CompilationUnit parse = parse(unit);
-										visitor = new TreeVisitor(parse);
-										parse.accept(visitor);
-										System.out.println(" Nodos en linea 4: " + visitor.hm);
-										String l = visitor.toString();
-										System.out.println(l);
+								//Obtiene la lista de paquetes de proyectos java
+								IPackageFragment[] packages = JavaCore.create(project)
+										.getPackageFragments();
+								// parse(JavaCore.create(project));
+								for (IPackageFragment mypackage : packages) {
+									if (mypackage.getKind() == IPackageFragmentRoot.K_SOURCE) {
+										for (ICompilationUnit unit : mypackage
+												.getCompilationUnits()) {
+											//AST Arbol sintactico
+											// Now create the AST for the ICompilationUnits
+											CompilationUnit parse = parse(unit);
+											visitor = new TreeVisitor(parse);
+											parse.accept(visitor);
+											System.out.println(" Nodos en linea 4: " + visitor.hm);
+											String l = visitor.toString();
+											System.out.println(l);
+											
+											
+											Rectangle tempBox = visitor.root.getSprites( 0, 0);
+											drawingBox = new Rectangle(tempBox.x*16, tempBox.y*16, (tempBox.width)*16, (tempBox.height)*16);
+											System.out.println(visitor.root.toString());
+											System.out.println("X="+drawingBox.x+",Y="+drawingBox.y);
+											
+											//pintar	
 										
-										
-										Rectangle tempBox = visitor.root.getSprites( 0, 0);
-										drawingBox = new Rectangle(tempBox.x*16, tempBox.y*16, tempBox.width*16, tempBox.height*16);
-										System.out.println(visitor.root.toString());
-										System.out.println("X="+drawingBox.x+",Y="+drawingBox.y);
-										
-										//pintar	
-									
-										image1 = new Image(myCanvas.getDisplay(), drawingBox);
-										ImageData imgData = image1.getImageData();
-										int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
-										System.out.println("WHITE PIXELLLLL = "+ whitePixel);
-										imgData.transparentPixel = whitePixel;
-										image1 = new Image(myCanvas.getDisplay(), imgData);
-										
-										
-										GC gc = new GC(image1);
-										MarioPainter painter = new MarioPainter(drawingBox.height-16, gc);
-										myCanvas.setBackgroundImage(painter.imgBG);
-										painter.paintTree(visitor.root);	
-										
-										//M�todo nuevo:
-										//painter.paintTreeDebug(visitor.root);
-										
-										image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
-										gc.dispose();
-										painter.img.dispose();
-										
-										
-										//controlar barra de scroll horizontal
-										final ScrollBar hBar = myCanvas.getHorizontalBar();
-										final Point origin = new Point(0, 0);
-									    hBar.addListener(SWT.Selection, new Listener() {
-									      public void handleEvent(Event e) {
-									        int hSelection = hBar.getSelection();
-									        int destX = -hSelection - origin.x;
-									        Rectangle rect = image1.getBounds();
-									        myCanvas.scroll(destX, 0, 0, 0, rect.width, rect.height, false);
-									        origin.x = -hSelection;
-									        //myCanvas.redraw();
-									      }
-									    });
-									    // controlar barra de scroll vertical
-									    final ScrollBar vBar = myCanvas.getVerticalBar();
-									    vBar.addListener(SWT.Selection, new Listener() {
-									      public void handleEvent(Event e) {
-									        int vSelection = vBar.getSelection();
-									        int destY = -vSelection - origin.y;
-									        Rectangle rect = image1.getBounds();
-									        myCanvas.scroll(0, destY, 0, 0, rect.width, rect.height, false);
-									        origin.y = -vSelection;
-									        //myCanvas.redraw();
-									      }
-									    });
-									    // cambio de tama�o del canvas
-									    myCanvas.addListener(SWT.Resize, new Listener() {
-									      public void handleEvent(Event e) {
-									        Rectangle rect = image1.getBounds();
-									        Rectangle client = myCanvas.getClientArea();
-									        hBar.setMaximum(rect.width);
-									        vBar.setMaximum(rect.height);
-									        hBar.setThumb(Math.min(rect.width, client.width));
-									        vBar.setThumb(Math.min(rect.height, client.height));
-									        int hPage = rect.width - client.width;
-									        int vPage = rect.height - client.height;
-									        int hSelection = hBar.getSelection();
-									        int vSelection = vBar.getSelection();
-									        if (hSelection >= hPage) {
-									          if (hPage <= 0)
-									            hSelection = 0;
-									          origin.x = -hSelection;
-									        }
-									        if (vSelection >= vPage) {
-									          if (vPage <= 0)
-									            vSelection = 0;
-									          origin.y = -vSelection;
-									        }
-									        myCanvas.redraw();
-									      }
-									    });
-									    
-									    myCanvas.addListener(SWT.Paint, new Listener() {
-									      public void handleEvent(Event e) {
-									        GC gc = e.gc;
-									        gc.drawImage(image1, origin.x, origin.y);
-									        /*Rectangle rect = image1.getBounds();
-									        Rectangle client = myCanvas.getClientArea();
-									        int marginWidth = client.width - rect.width;
-									        if (marginWidth > 0) {
-									          gc.fillRectangle(rect.width, 0, marginWidth, client.height);
-									        }
-									        int marginHeight = client.height - rect.height;
-									        if (marginHeight > 0) {
-									          gc.fillRectangle(0, rect.height, client.width,
-									                  marginHeight);
-									        }*/
-									        //myCanvas.redraw();
-									      }
-									    });
-									    
-									    myCanvas.redraw();
+											image1 = new Image(myCanvas.getDisplay(), drawingBox);
+											GC gc = new GC(image1);
+											
 
-										
-										//myImage.dispose();
-																													
+											Image bgImage = new Image(myCanvas.getDisplay(), MaryoCodeView.class.getResourceAsStream("background1.jpg"));
+
+											
+											gc.drawImage(bgImage, 0, 0, image1.getBounds().width, image1.getBounds().height, 0, 0, image1.getBounds().width, image1.getBounds().height);
+											
+											ImageData imgData = image1.getImageData();
+											int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
+											System.out.println("WHITE PIXELLLLL = "+ whitePixel);
+											imgData.transparentPixel = whitePixel;
+											image1 = new Image(myCanvas.getDisplay(), imgData);
+											gc = new GC(image1);
+											
+											MarioPainter painter = new MarioPainter(drawingBox.height-16, gc);
+											
+											painter.paintTree(visitor.root);	
+											
+											//M�todo nuevo:
+											painter.paintTreeDebug(visitor.root);
+											
+											image1.getImageData().transparentPixel = image1.getImageData().palette.getPixel(new RGB(255,255,255));										
+											gc.dispose();
+											painter.img.dispose();
+											
+											
+											//controlar barra de scroll horizontal
+											final ScrollBar hBar = myCanvas.getHorizontalBar();
+											final Point origin = new Point(0, 0);
+										    hBar.addListener(SWT.Selection, new Listener() {
+										      public void handleEvent(Event e) {
+										        int hSelection = hBar.getSelection();
+										        int destX = -hSelection - origin.x;
+										        Rectangle rect = image1.getBounds();
+										        myCanvas.scroll(destX, 0, 0, 0, rect.width, rect.height, false);
+										        origin.x = -hSelection;
+										        //myCanvas.redraw();
+										      }
+										    });
+										    // controlar barra de scroll vertical
+										    final ScrollBar vBar = myCanvas.getVerticalBar();
+										    vBar.addListener(SWT.Selection, new Listener() {
+										      public void handleEvent(Event e) {
+										        int vSelection = vBar.getSelection();
+										        int destY = -vSelection - origin.y;
+										        Rectangle rect = image1.getBounds();
+										        myCanvas.scroll(0, destY, 0, 0, rect.width, rect.height, false);
+										        origin.y = -vSelection;
+										        //myCanvas.redraw();
+										      }
+										    });
+										    // cambio de tama�o del canvas
+										    myCanvas.addListener(SWT.Resize, new Listener() {
+										      public void handleEvent(Event e) {
+										        Rectangle rect = image1.getBounds();
+										        Rectangle client = myCanvas.getClientArea();
+										        hBar.setMaximum(rect.width);
+										        vBar.setMaximum(rect.height);
+										        hBar.setThumb(Math.min(rect.width, client.width));
+										        vBar.setThumb(Math.min(rect.height, client.height));
+										        int hPage = rect.width - client.width;
+										        int vPage = rect.height - client.height;
+										        int hSelection = hBar.getSelection();
+										        int vSelection = vBar.getSelection();
+										        if (hSelection >= hPage) {
+										          if (hPage <= 0)
+										            hSelection = 0;
+										          origin.x = -hSelection;
+										        }
+										        if (vSelection >= vPage) {
+										          if (vPage <= 0)
+										            vSelection = 0;
+										          origin.y = -vSelection;
+										        }
+										        myCanvas.redraw();
+										      }
+										    });
+										    
+										    myCanvas.addListener(SWT.Paint, new Listener() {
+										      public void handleEvent(Event e) {
+										        GC gc = e.gc;
+										        gc.drawImage(image1, origin.x, origin.y);
+										        /*Rectangle rect = image1.getBounds();
+										        Rectangle client = myCanvas.getClientArea();
+										        int marginWidth = client.width - rect.width;
+										        if (marginWidth > 0) {
+										          gc.fillRectangle(rect.width, 0, marginWidth, client.height);
+										        }
+										        int marginHeight = client.height - rect.height;
+										        if (marginHeight > 0) {
+										          gc.fillRectangle(0, rect.height, client.width,
+										                  marginHeight);
+										        }*/
+										        //myCanvas.redraw();
+										      }
+										    });
+										    
+										    myCanvas.redraw();
+
+											
+											//myImage.dispose();
+																														
+										}
 									}
 								}
+								
 							}
-							
+						} catch (JavaModelException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (CoreException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					} catch (CoreException e) {
-						e.printStackTrace();
-					/*} catch (JsonParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (JsonMappingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						*/
-					}
+
 				}
 			}
 		};

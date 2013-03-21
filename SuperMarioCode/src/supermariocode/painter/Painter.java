@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
-import supermariocode.views.MarioCodeView;
+import supermariocode.views.MaryoCodeView;
 
 
 
@@ -53,8 +53,8 @@ public class Painter  {
 	
 	public Painter(int y) {
 		
-        img = new Image(MarioCodeView.myCanvas.getDisplay(),
-    			MarioCodeView.class.getResourceAsStream("smwtileset.gif"));
+        img = new Image(MaryoCodeView.myCanvas.getDisplay(),
+    			MaryoCodeView.class.getResourceAsStream("smwtileset.gif"));
         base = y;
 	}
 	
@@ -75,7 +75,7 @@ public class Painter  {
 			Color c = new Color(g.getDevice(), 248, 224, 176);
 			g.setBackground(c);
 			
-			g.fillRectangle(new Rectangle(0, 0, MarioCodeView.width, MarioCodeView.height));
+			g.fillRectangle(new Rectangle(0, 0, MaryoCodeView.width, MaryoCodeView.height));
 			if (tree!= null) {
 				paintTree(tree, g);
 			}			
