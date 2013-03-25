@@ -294,9 +294,13 @@ public class MaryoCodeView extends ViewPart implements ISelectionListener {
 											
 
 											Image bgImage = new Image(myCanvas.getDisplay(), MaryoCodeView.class.getResourceAsStream("background1.jpg"));
+											for (int px=0; px<drawingBox.width;px += bgImage.getBounds().width) {
+												for (int py=0; py<drawingBox.height;py +=bgImage.getBounds().height) {
+													gc.drawImage(bgImage, 0, 0, bgImage.getBounds().width, bgImage.getBounds().height, px, py, image1.getBounds().width, image1.getBounds().height);															
+												}												
+											}
 
 											
-											gc.drawImage(bgImage, 0, 0, image1.getBounds().width, image1.getBounds().height, 0, 0, image1.getBounds().width, image1.getBounds().height);
 											
 											ImageData imgData = image1.getImageData();
 											int whitePixel = imgData.palette.getPixel(new RGB(255,255,255));
