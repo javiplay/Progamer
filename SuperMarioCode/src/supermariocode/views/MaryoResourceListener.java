@@ -9,6 +9,10 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
 public class MaryoResourceListener implements IResourceChangeListener 
 {
@@ -26,6 +30,7 @@ public class MaryoResourceListener implements IResourceChangeListener
 		if (event.getType() ==  IResourceChangeEvent.POST_CHANGE) {
 			
 			final ArrayList<IResource> changed = new ArrayList<IResource>();
+			
 			IResourceDelta rootDelta = event.getDelta();
 
 			//definimos el visitante
@@ -55,15 +60,21 @@ public class MaryoResourceListener implements IResourceChangeListener
 			
 
 	        if (changed.size()>0){
+	        	
+	        	IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				MaryoCodeView view = (MaryoCodeView) page.findView(MaryoCodeView.ID);
+				view.action1.run();	
+				
 				System.out.println("Evento resourceChanged (tipo POST_CHANGE)");
 				for (IResource res: changed ) {
 					System.out.println("Resource: "+ res.getName());				
 				}
-				System.out.println("-----------------------------------------");
+				System.out.println("-----------------------------------------");				
 	        }
-			
-			
-				
+	        
+	        
+					
+							
 		}
 	}
 }

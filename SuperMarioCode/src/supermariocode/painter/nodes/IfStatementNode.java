@@ -25,8 +25,10 @@ public class IfStatementNode extends JavaMarioNode {
 		if(elem.children.size() >= 2){
 			thenNode = elem.children.get(1);
 		}
-		
-		Rectangle elseBox = elseNode.getSprites(x+1, y);
+		Rectangle elseBox = new Rectangle(0, 0, 0, 0);
+		if (elseNode != null) {
+			elseBox = elseNode.getSprites(x+1, y);
+		} 
 		
 		y += elseBox.height;
 		
