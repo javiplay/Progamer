@@ -3,7 +3,7 @@ code-reimagined: Progamer
 
 Main repository to maintain Code Reimagined
 
-Code Reimagined es un juego serio en forma de plugin para Eclipse (para Java). 
+Code Reimagined es un plugin para Eclipse (para Java). 
 
 Básicamente ofrece una vista en el entorno de Eclipse donde podemos observar una representación visual gráfica 
 del código que se está escribiendo. Esta representación gráfica consiste en identificar los elementos del código 
