@@ -1,5 +1,5 @@
-code-reimagined
-===============
+code-reimagined: Progamer
+=========================
 
 Main repository to maintain Code Reimagined
 
