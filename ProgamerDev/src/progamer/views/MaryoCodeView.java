@@ -22,6 +22,7 @@ package progamer.views;
 
 
 
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.BoundedRangeModel;
@@ -79,6 +80,7 @@ import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import progamer.ProgamerPlugin;
 import progamer.drawing.MarioPainter;
 import progamer.drawing.SpriteProvider;
 import progamer.drawing.nodes.JavaMarioNode;
@@ -156,11 +158,13 @@ public class MaryoCodeView extends ViewPart implements ISelectionListener {
 	    control = parent;	   
 		myCanvas = new Canvas(control, SWT.H_SCROLL | SWT.V_SCROLL);
 		
+		maryoImg = ProgamerPlugin.getImageDescriptor("icons/ani_smwmariobig.gif").createImage();
 
-		maryoImg = new Image(myCanvas.getDisplay(), MaryoCodeView.class.getResourceAsStream("ani_smwmariobig.gif"));
+		//maryoImg = new Image(myCanvas.getDisplay(), MaryoCodeView.class.getResourceAsStream("ani_smwmariobig.gif"));
 		
-		image2 = new Image(MaryoCodeView.myCanvas.getDisplay(),
-    			MaryoCodeView.class.getResourceAsStream("background1.jpg"));
+		image2 = ProgamerPlugin.getImageDescriptor("icons/background1.jpg").createImage();
+/*		image2 = new Image(MaryoCodeView.myCanvas.getDisplay(),
+    			MaryoCodeView.class.getResourceAsStream("background1.jpg"));*/
 
         //myCanvas.setBackgroundImage(image2);
         //labelState = new Label(parent, SWT.WRAP);

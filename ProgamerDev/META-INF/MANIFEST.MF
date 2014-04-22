@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SuperMarioCode
-Bundle-SymbolicName: ProgamerEclipsePluginProj;singleton:=true
+Bundle-SymbolicName: es.javiplay.progamer;singleton:=true
 Bundle-Version: 1.0.0
-Bundle-Activator: progamer.Activator
+Bundle-Activator: progamer.ProgamerPlugin
 Bundle-Vendor: Javier Asensio
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
