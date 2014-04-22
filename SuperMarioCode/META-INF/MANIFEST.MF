@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SuperMarioCode
-Bundle-SymbolicName: SuperMarioCode; singleton:=true
+Bundle-SymbolicName: ProgamerEclipsePluginProj;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: supermariocode.Activator
 Bundle-Vendor: Javier Asensio
