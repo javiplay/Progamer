@@ -62,7 +62,7 @@ public class MaryoResourceListener implements IResourceChangeListener
 	        if (changed.size()>0){
 	        	
 	        	IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				MaryoCodeView view = (MaryoCodeView) page.findView(MaryoCodeView.ID);
+				ProgamerMainView view = (ProgamerMainView) page.findView(ProgamerMainView.ID);
 				view.action1.run();	
 				
 				System.out.println("Evento resourceChanged (tipo POST_CHANGE)");

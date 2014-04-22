@@ -12,7 +12,7 @@
             name="Maryo View"
             icon="icons/ani_smwmariobig.gif"
             category="SuperMarioCode"
-            class="progamer.views.MaryoCodeView"
+            class="progamer.views.ProgamerMainView"
             id="supermariocode.views.MarioCodeView">
       </view>
    </extension>

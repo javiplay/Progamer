@@ -109,7 +109,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  * <p>
  */
 
-public class MaryoCodeView extends ViewPart implements ISelectionListener {
+public class ProgamerMainView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -145,7 +145,7 @@ public class MaryoCodeView extends ViewPart implements ISelectionListener {
 	/**
 	 * The constructor.
 	 */
-	public MaryoCodeView() {
+	public ProgamerMainView() {
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class MaryoCodeView extends ViewPart implements ISelectionListener {
 					GC gc = new GC(image1);
 					
 
-					Image bgImage = new Image(myCanvas.getDisplay(), MaryoCodeView.class.getResourceAsStream("background1.jpg"));
+					Image bgImage = new Image(myCanvas.getDisplay(), ProgamerMainView.class.getResourceAsStream("background1.jpg"));
 					for (int px=0; px<drawingBox.width;px += bgImage.getBounds().width) {
 						for (int py=0; py<drawingBox.height;py +=bgImage.getBounds().height) {
 							gc.drawImage(bgImage, 0, 0, bgImage.getBounds().width, bgImage.getBounds().height, px, py, image1.getBounds().width, image1.getBounds().height);															

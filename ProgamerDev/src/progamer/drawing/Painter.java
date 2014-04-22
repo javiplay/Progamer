@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
-import progamer.views.MaryoCodeView;
+import progamer.views.ProgamerMainView;
 
 
 
@@ -54,8 +54,8 @@ public class Painter  {
 	
 	public Painter(int y) {
 		
-        img = new Image(MaryoCodeView.myCanvas.getDisplay(),
-    			MaryoCodeView.class.getResourceAsStream("smwtileset.gif"));
+        img = new Image(ProgamerMainView.myCanvas.getDisplay(),
+    			ProgamerMainView.class.getResourceAsStream("smwtileset.gif"));
         base = y;
 	}
 	
@@ -76,7 +76,7 @@ public class Painter  {
 			Color c = new Color(g.getDevice(), 248, 224, 176);
 			g.setBackground(c);
 			
-			g.fillRectangle(new Rectangle(0, 0, MaryoCodeView.width, MaryoCodeView.height));
+			g.fillRectangle(new Rectangle(0, 0, ProgamerMainView.width, ProgamerMainView.height));
 			if (tree!= null) {
 				paintTree(tree, g);
 			}			

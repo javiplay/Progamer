@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
 import progamer.drawing.nodes.JavaMarioNode;
-import progamer.views.MaryoCodeView;
+import progamer.views.ProgamerMainView;
 
 
 public class MarioPainter {
@@ -59,10 +59,10 @@ public class MarioPainter {
 	
 	public MarioPainter(int base, GC g) {
 
-		img = new Image(MaryoCodeView.myCanvas.getDisplay(),
-				MaryoCodeView.class.getResourceAsStream("smwtileset.gif"));
-		imgBG = new Image(MaryoCodeView.myCanvas.getDisplay(),
-				MaryoCodeView.class.getResourceAsStream("background1.jpg"));
+		img = new Image(ProgamerMainView.myCanvas.getDisplay(),
+				ProgamerMainView.class.getResourceAsStream("smwtileset.gif"));
+		imgBG = new Image(ProgamerMainView.myCanvas.getDisplay(),
+				ProgamerMainView.class.getResourceAsStream("background1.jpg"));
 		this.base = base;
 		this.g = g;
 
